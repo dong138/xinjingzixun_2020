@@ -88,15 +88,16 @@
         </div>
         <ul class="rank_list">
             {% for new in clicks_top_6_news %}
-                {% if loop.index == 1 %}
-                    <li><span class="first">{{ loop.index }}</span><a href="#">{{ new.title }}</a></li>
-                {% elif loop.index == 2 %}
-                    <li><span class="second">{{ loop.index }}</span><a href="#">{{ new.title }}</a></li>
-                {% elif loop.index == 3 %}
-                    <li><span class="third"> {{ loop.index }}</span><a href="#">{{ new.title }}</a></li>
-                {% else %}
-                    <li><span>{{ loop.index }}</span><a href="#">{{ new.title }}</a></li>
-                {% endif %}
+                <li><span class="{{ loop.index | show_top_6_news_style }}">{{ loop.index }}</span><a href="#">{{ new.title }}</a></li>
+                {#                {% if loop.index == 1 %}#}
+                {#                    <li><span class="first">{{ loop.index }}</span><a href="#">{{ new.title }}</a></li>#}
+                {#                {% elif loop.index == 2 %}#}
+                {#                    <li><span class="second">{{ loop.index }}</span><a href="#">{{ new.title }}</a></li>#}
+                {#                {% elif loop.index == 3 %}#}
+                {#                    <li><span class="third"> {{ loop.index }}</span><a href="#">{{ new.title }}</a></li>#}
+                {#                {% else %}#}
+                {#                    <li><span>{{ loop.index }}</span><a href="#">{{ new.title }}</a></li>#}
+                {#                {% endif %}#}
 
             {% endfor %}
 

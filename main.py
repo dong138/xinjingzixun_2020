@@ -4,6 +4,7 @@ from flask_script import Manager
 
 from views import index_blu
 from models import db
+from utils.common import show_top_6_news_style
 
 # 创建flask应用对象
 app = Flask(__name__)
@@ -16,6 +17,9 @@ app.register_blueprint(index_blu)
 
 # 初始化数据库
 db.init_app(app)
+
+# 添加过滤器
+app.add_template_filter(show_top_6_news_style)
 
 # 添加数据库迁移等工具
 manager = Manager(app)
