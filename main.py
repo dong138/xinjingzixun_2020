@@ -14,6 +14,9 @@ app.config.from_pyfile("config.ini")
 # 创建蓝图，且注册到app
 app.register_blueprint(index_blu)
 
+# 初始化数据库
+db.init_app(app)
+
 # 添加数据库迁移等工具
 manager = Manager(app)
 # 生成migrate对象 用来数据库迁移
