@@ -38,3 +38,8 @@ def category_news():
 
     # 4. 将ret字典转换为json样子的字符串，返回
     return jsonify(ret)
+
+
+@index_blu.route("/detail/<int:news_id>")
+def detail(news_id):
+    return render_template("detail.html")
