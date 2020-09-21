@@ -42,4 +42,6 @@ def category_news():
 
 @index_blu.route("/detail/<int:news_id>")
 def detail(news_id):
-    return render_template("detail.html")
+    # 根据news_id查询这个新闻的详情
+    news = db.session.query(News).filter(News.id == news_id).first()
+    return render_template("detail.html", news=news)
