@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template,jsonify
 
 from models import db
 from models.index import News
@@ -15,4 +15,25 @@ def index():
 
 @index_blu.route("/newslist")
 def category_news():
-    return "这是返回的新闻列表测试数据"
+    ret = {
+        "totalPage": 2,
+        "newsList": [
+            {
+                "id": 1,
+                "title": "我是测试新闻1",
+                "index_image_url": "",
+                "digest": "这个新闻很棒.......",
+                "create_time": "2020年09月21日",
+                "source": "王老师日报"
+            },
+            {
+                "id": 2,
+                "title": "我是测试新闻2",
+                "index_image_url": "",
+                "digest": "这个新闻很棒2.......",
+                "create_time": "2020年09月22日",
+                "source": "王老师日报2"
+            }
+        ]
+    }
+    return jsonify(ret)
