@@ -4,6 +4,7 @@ from flask_script import Manager
 
 from views import index_blu
 from models import db
+from utils.common import show_clicks_top_6_news
 
 # 创建flask对象
 app = Flask(__name__)
@@ -16,6 +17,9 @@ app.config.from_pyfile("config.ini")
 
 # 将SQLAlchemy对象与app对象进行关联，从而让SQLAlchemy对象知道响应的数据库配置
 db.init_app(app)
+
+# 添加自定义过滤器
+app.add_template_filter(show_clicks_top_6_news)
 
 # 添加数据库迁移等工具
 manager = Manager(app)

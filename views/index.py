@@ -10,6 +10,6 @@ from . import index_blu
 @index_blu.route("/")
 def index():
     # return "我是第一个网页...new"
-    news = db.session.query(News).first()
-    print("--------->", news)
-    return render_template("index.html")
+    clicks_top_6_news = db.session.query(News).order_by(-News.clicks).limit(6)
+    # print("--------->", news)
+    return render_template("index.html", clicks_top_6_news=clicks_top_6_news)
