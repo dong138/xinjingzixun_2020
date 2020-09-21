@@ -1,4 +1,4 @@
-from flask import render_template,jsonify
+from flask import render_template, jsonify, request
 
 from models import db
 from models.index import News
@@ -15,8 +15,18 @@ def index():
 
 @index_blu.route("/newslist")
 def category_news():
+    # 1. 获取前端传递过来的数据，就是提取 URL中的数据
+    # http://127.0.0.1:8899/newslist?page=1&cid=1&per_page=10
+    # 要从上述URL中提取page、cid、per_page的值
+    page = request.args.get('page', 1)  # 前端要的是哪一页的数据
+    cid = request.args.get('cid', 0)  # 前端要的是哪个分类的数据，是股市、债市还是商品、外汇、公司
+    per_page = request.args.get('per_page', 1)  # 前端要的是每一页中的新闻个数
+
+    # 2. 到数据库中查询数据
+    paginate = db.session.query(News).paginate(page=int(page), per_page=int(per_page), error_out=False)
+
     ret = {
-        "totalPage": 2,
+        "totalPage": paginate.pages,  # 总页数
         "newsList": [
             {
                 "id": 1,
