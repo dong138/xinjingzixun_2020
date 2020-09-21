@@ -11,3 +11,8 @@ def index():
     # 查询点击量最多的前6个新闻信息
     clicks_top_6_news = db.session.query(News).order_by(-News.clicks).limit(6)
     return render_template("index.html", clicks_top_6_news=clicks_top_6_news)
+
+
+@index_blu.route("/newslist")
+def category_news():
+    return "这是返回的新闻列表测试数据"
