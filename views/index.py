@@ -28,21 +28,8 @@ def category_news():
     # 3. 准备好要返回给浏览器的数据
     ret = {
         "totalPage": paginate.pages,  # 总页数
-        "newsList": []
+        "newsList": [news.to_dict() for news in paginate.items]
     }
 
-    # 4. 遍历当前页中新闻信息,最终的目的取新闻对象中的属性，将其封装到字典中
-    for news in paginate.items:
-        temp_dit = dict()
-        temp_dit["id"] = news.id
-        temp_dit["digest"] = news.digest
-        temp_dit["create_time"] = news.create_time
-        temp_dit["index_image_url"] = news.index_image_url
-        temp_dit["source"] = news.source
-        temp_dit["title"] = news.title
-
-        # 将得到的字典，添加到ret中newsList对应的列表中
-        ret['newsList'].append(temp_dit)
-
-    # 5. 将ret字典转换为json样子的字符串，返回
+    # 4. 将ret字典转换为json样子的字符串，返回
     return jsonify(ret)

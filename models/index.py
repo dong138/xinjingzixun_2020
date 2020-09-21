@@ -22,6 +22,21 @@ class News(db.Model):
 
     category = db.relationship('Category', backref='news')
 
+    def to_dict(self):
+        """
+        定义一个方法，用来将将对象中的部分属性，转换为字典
+        :return: 一个字典
+        """
+        ret = {
+            "id": self.id,
+            "create_time": self.create_time,
+            "digest": self.digest,
+            "index_image_url": self.index_image_url,
+            "source": self.source,
+            "title": self.title
+        }
+        return ret
+
 
 class Category(db.Model):
     """新闻分类"""
