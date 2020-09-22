@@ -36,3 +36,9 @@ def news_list():
     }
 
     return jsonify(ret)  # 将python中的字典 转换为字符串，且这个字符串的格式是很类似字典的，这种格式叫做json
+
+
+@index_blu.route("/detail/<int:news_id>")
+def detail(news_id):
+    news = db.session.query(News).filter(News.id == news_id).first()
+    return render_template("detail.html", news=news)
