@@ -1,4 +1,4 @@
-from flask import request, jsonify
+from flask import request, jsonify, session
 
 from models import db
 from models.index import User
@@ -62,6 +62,9 @@ def login():
             "errno": 0,
             "errmsg": "登录成功"
         }
+
+        session['user_id'] = user.id
+        session['nick_name'] = mobile
     else:
         ret = {
             "errno": 2001,
