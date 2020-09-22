@@ -34,6 +34,11 @@ def register():
     try:
         db.session.add(user)
         db.session.commit()
+
+        # 注册成功之后，立刻认为登录成功，也就说需要进行状态保持
+        session['user_id'] = user.id
+        session['nick_name'] = mobile
+
         ret = {
             "errno": 0,
             "errmsg": "注册成功..."
