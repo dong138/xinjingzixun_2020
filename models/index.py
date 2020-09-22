@@ -22,6 +22,16 @@ class News(db.Model):
 
     category = db.relationship('Category', backref='news')
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "index_image_url": self.index_image_url,
+            "title": self.title,
+            "digest": self.digest,
+            "create_time": self.create_time,
+            "source": self.source
+        }
+
 
 class Category(db.Model):
     """新闻分类"""

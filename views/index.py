@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, jsonify, request
 
 from models import db
 from models.index import News
@@ -13,3 +13,26 @@ def index():
     clicks_top_6_news = db.session.query(News).order_by(-News.clicks).limit(6)
     # print("--------->", news)
     return render_template("index.html", clicks_top_6_news=clicks_top_6_news)
+
+
+@index_blu.route("/newslist")
+def news_list():
+    # 1. 提取数据
+    page = int(request.args.get("page"))
+    cid = int(request.args.get("cid")) + 1
+    per_page = int(request.args.get("per_page"))
+
+    # 2. 根据前端传递过来的参数，查询数据库
+    # 且 创建了paginate对象，这个对象中有分页需要的所有信息
+    # 如果是要查询最新的信息，那么按照新闻的update_time进行倒叙排序，而不是找这个分类
+    if cid == 1:
+        paginate = db.session.query(News).order_by(-News.update_time).paginate(page, per_page, False)
+    else:
+        paginate = db.session.query(News).filter(News.category_id == cid).paginate(page, per_page, False)
+
+    ret = {
+        "totalPage": paginate.pages,  # 总页数
+        "newsList": [news.to_dict() for news in paginate.items]
+    }
+
+    return jsonify(ret)  # 将python中的字典 转换为字符串，且这个字符串的格式是很类似字典的，这种格式叫做json
