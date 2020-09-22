@@ -47,3 +47,13 @@ def register():
         }
 
     return jsonify(ret)
+
+
+@passport_blu.route("/passport/login", methods=["GET", "POST"])
+def login():
+    ret = {
+        "errno": 0,
+        "errmsg": "登录成功"
+    }
+
+    return jsonify(ret)
