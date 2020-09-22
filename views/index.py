@@ -49,4 +49,9 @@ def category_news():
 def detail(news_id):
     # 根据news_id查询这个新闻的详情
     news = db.session.query(News).filter(News.id == news_id).first()
-    return render_template("detail.html", news=news)
+
+    # 查询用户是否已经登录
+    user_id = session.get("user_id", 0)
+    nick_name = session.get("nick_name", "")
+
+    return render_template("detail.html", news=news, nick_name=nick_name)
