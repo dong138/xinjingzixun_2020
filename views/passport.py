@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, jsonify
 
 from models import db
 from models.index import User
@@ -19,8 +19,11 @@ def register():
 
     # 2. 创建一个新的用户
     # 2.1 先查询是否有这个相同的用户
-    if db.session.query(User).filter().first():
-        return "已经注册"
+    if db.session.query(User).filter(User.mobile == mobile).first():
+        return jsonify({
+            "errno": 1001,
+            "errmsg": "已经注册..."
+        })
 
     # 2.2 注册用户
     # 将新用户的数据插入到数据库
@@ -31,10 +34,16 @@ def register():
     try:
         db.session.add(user)
         db.session.commit()
-        ret = "注册成功..."
+        ret = {
+            "errno": 0,
+            "errmsg": "注册成功..."
+        }
     except Exception as ret:
         print("---->", ret)
         db.session.rollback()  # 如果在将用户的信
-        ret = "注册失败..."
+        ret = {
+            "errno": 1002,
+            "errmsg": "注册失败..."
+        }
 
-    return ret
+    return jsonify(ret)
