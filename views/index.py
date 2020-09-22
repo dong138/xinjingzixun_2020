@@ -1,4 +1,4 @@
-from flask import render_template, jsonify, request
+from flask import render_template, jsonify, request, session
 
 from models import db
 from models.index import News
@@ -10,7 +10,12 @@ from . import index_blu
 def index():
     # 查询点击量最多的前6个新闻信息
     clicks_top_6_news = db.session.query(News).order_by(-News.clicks).limit(6)
-    return render_template("index.html", clicks_top_6_news=clicks_top_6_news)
+
+    # 查询用户是否已经登录
+    user_id = session.get("user_id", 0)
+    nick_name = session.get("nick_name", "")
+
+    return render_template("index.html", clicks_top_6_news=clicks_top_6_news, nick_name=nick_name)
 
 
 @index_blu.route("/newslist")
