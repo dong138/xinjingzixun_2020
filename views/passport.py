@@ -90,8 +90,17 @@ def logout():
 @passport_blu.route("/passport/image_code")
 def image_code():
     # 读取一个图片
-    with open("./yanzhengma.png", "rb") as f:
-        image = f.read()
+    # with open("./yanzhengma.png", "rb") as f:
+    #     image = f.read()
+
+    # 真正的生成一张图片数据
+    from utils.captcha.captcha import captcha
+
+    # 生成验证码
+    # hash值  验证码值  图片内容
+    name, text, image = captcha.generate_captcha()
+
+    print("刚刚生成的验证码：", text)
 
     # 返回响应内容
     resp = make_response(image)
