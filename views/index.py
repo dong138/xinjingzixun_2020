@@ -53,6 +53,7 @@ def detail(news_id):
     # 查询这个新闻的作者
     news_author = news.user
     news_author.news_num = news_author.news.count()
+    news_author.follwer_num = news_author.followers.count()
 
     # 查询用户是否已经登录
     user_id = session.get("user_id", 0)
