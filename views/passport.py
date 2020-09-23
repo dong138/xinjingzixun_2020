@@ -1,4 +1,4 @@
-from flask import request, jsonify, session, redirect, url_for
+from flask import request, jsonify, session, redirect, url_for, make_response
 
 from models import db
 from models.index import User
@@ -85,3 +85,18 @@ def logout():
     session.clear()
 
     return redirect(url_for('index_blu.index'))
+
+
+@passport_blu.route("/passport/image_code")
+def image_code():
+    # 读取一个图片
+    with open("./yanzhengma.png", "rb") as f:
+        image = f.read()
+
+    # 返回响应内容
+    resp = make_response(image)
+
+    # 设置内容类型
+    resp.headers['Content-Type'] = 'image/png'
+
+    return resp
