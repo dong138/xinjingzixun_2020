@@ -44,4 +44,7 @@ def news_list():
 @index_blu.route("/detail/<int:news_id>")
 def detail(news_id):
     news = db.session.query(News).filter(News.id == news_id).first()
-    return render_template("detail.html", news=news)
+    # 提取session，以验证用户是否登录成
+    user_id = session.get("user_id")
+    nick_name = session.get("nick_name")
+    return render_template("detail.html", news=news, nick_name=nick_name)
