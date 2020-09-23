@@ -68,7 +68,7 @@ body{
     height:30px;
     overflow: hidden;
     margin-top:15px;
-    display:none;    
+    /*display:none;    */
 }
 
 .user_login img{
@@ -93,7 +93,7 @@ body{
 }
 
 .list_con{
-    width:820px;    
+    width:820px;
 }
 
 .list_con li{
@@ -186,7 +186,7 @@ body{
 .card_list_con{
     width:760px;
     overflow:hidden;
-    margin-left:10px;    
+    margin-left:10px;
 }
 
 .card_list{
@@ -205,7 +205,7 @@ body{
 .author_pic{
     float:left;
     width:60px;
-    height:60px;    
+    height:60px;
 }
 .author_pic img{
     width:60px;
@@ -239,14 +239,14 @@ body{
 .writings span,.follows span{
     display: block;
     font-size:12px;
-    color:#999;    
+    color:#999;
 }
 
 .writings b,.follows b{
     display: block;
     font-weight:normal;
     font-size:18px;
-    color:#333;    
+    color:#333;
 }
 
 .rank_title{
@@ -653,15 +653,14 @@ body{
     background:url(../images/focus_icons.png) 21px -33px no-repeat;
 }
 
-
 .collected{
-    display:inline-block;
+    /*display:inline-block;*/
     width:100px;
     height:36px;
     color:#666;
     border-radius:4px;
     font-size:14px;
-    margin:0px 5px;
+    /*margin:0px 5px;*/
     background:url(../images/collect_icons.png) 15px -73px no-repeat #e6e6e6;
     position:relative;
     overflow:hidden;
@@ -1111,7 +1110,7 @@ body{
     width:450px;
     overflow: hidden;
     text-overflow:ellipsis;
-    white-space: nowrap;    
+    white-space: nowrap;
     font-size:14px;
     color:#666;
     float:left;

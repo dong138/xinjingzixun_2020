@@ -1,4 +1,4 @@
-from flask import jsonify, request
+from flask import jsonify, request, session
 
 from models.index import User
 from models import db
@@ -70,6 +70,9 @@ def login():
             "errno": 0,
             "errmsg": "登录成功"
         }
+
+        session['user_id'] = user.id
+        session['nick_name'] = user.nick_name
     else:
         ret = {
             "errno": 1003,

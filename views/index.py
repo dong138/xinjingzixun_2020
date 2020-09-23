@@ -1,4 +1,4 @@
-from flask import render_template, jsonify, request
+from flask import render_template, jsonify, request, session
 
 from models import db
 from models.index import News
@@ -11,8 +11,11 @@ from . import index_blu
 def index():
     # return "我是第一个网页...new"
     clicks_top_6_news = db.session.query(News).order_by(-News.clicks).limit(6)
-    # print("--------->", news)
-    return render_template("index.html", clicks_top_6_news=clicks_top_6_news)
+    # 提取session，以验证用户是否登录成
+    user_id = session.get("user_id")
+    nick_name = session.get("nick_name")
+
+    return render_template("index.html", clicks_top_6_news=clicks_top_6_news, nick_name=nick_name)
 
 
 @index_blu.route("/newslist")
