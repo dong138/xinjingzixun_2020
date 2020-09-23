@@ -19,6 +19,8 @@ class News(db.Model):
     create_time = db.Column(db.DateTime, default=datetime.now)  # 记录的创建时间
     update_time = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)  # 记录的更新时间
     category_id = db.Column(db.Integer, db.ForeignKey("category.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))  # 当前新闻的作者id
+    user = db.relationship('User', backref=db.backref('news', lazy='dynamic'))
 
     category = db.relationship('Category', backref='news')
 
