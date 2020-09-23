@@ -1,5 +1,8 @@
 from flask import jsonify, request
 
+from models.index import User
+from models import db
+
 from . import passport_blu
 
 
@@ -20,9 +23,58 @@ def register():
     password = request.json.get("password")
     smscode = request.json.get("smscode")
 
+    # 2. 创建User模型类对象，添加属性
+    # 2.1 判断是否存在相同的手机号
+    if db.session.query(User).filter(User.mobile == mobile).first():
+        ret = {
+            "errno": 1001,
+            "errmsg": "手机号已经注册过..."
+        }
 
-    ret = {
-        "errno": 1,
-        "errmsg": "登录成功..."
-    }
+        return jsonify(ret)
+
+    user = User()
+    user.nick_name = mobile
+    user.password_hash = password
+    user.mobile = mobile
+
+    try:
+        db.session.add(user)
+        db.session.commit()
+        ret = {
+            "errno": 0,
+            "errmsg": "登录成功..."
+        }
+    except Exception as ret:
+        db.session.rollback()
+
+        ret = {
+            "errno": 1002,
+            "errmsg": "注册失败..."
+        }
+
+    return jsonify(ret)
+
+
+@passport_blu.route("/passport/login", methods=["POST"])
+def login():
+    # 实现登录的大体逻辑
+    # 1. 获取手机号、密码
+    mobile = request.json.get("mobile")
+    password = request.json.get("password")
+
+    # 2. 查询
+    user = db.session.query(User).filter(User.mobile == mobile, User.password_hash == password).first()
+    if user:
+        ret = {
+            "errno": 0,
+            "errmsg": "登录成功"
+        }
+    else:
+        ret = {
+            "errno": 1003,
+            "errmsg": "登录失败..."
+        }
+
+    # 3. 根据查询的结果返回对应的数据
     return jsonify(ret)
