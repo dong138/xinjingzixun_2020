@@ -59,4 +59,11 @@ def detail(news_id):
     user_id = session.get("user_id", 0)
     nick_name = session.get("nick_name", "")
 
+    # 计算当前登录用户是否已经关注了这个新闻的作者
+    news_author_followers_id = [x.id for x in news_author.followers]
+    if user_id in news_author_followers_id:
+        news_author.can_follow = False  # 已经关注了作者，就不能在关注了
+    else:
+        news_author.can_follow = True  # 可以关注
+
     return render_template("detail.html", news=news, nick_name=nick_name, news_author=news_author)
