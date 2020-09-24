@@ -9,18 +9,19 @@ from . import user_blu
 def follow():
     action = request.json.get("action")
 
+    # 提取到if前面，以便在if或者else中都可以使用
+    # 1. 提取当前作者的id
+    news_author_id = request.json.get("user_id")
+
+    # 2. 提取当前登录用户的id
+    user_id = session.get("user_id")
+
     if action == "do":
         # 实现关注的流程
         # 1. 提取当前作者的id
         # 2. 提取当前登录用户的id
         # 3. 判断之前是否已经关注过
         # 4. 如果未关注，则进行关注
-
-        # 1. 提取当前作者的id
-        news_author_id = request.json.get("user_id")
-
-        # 2. 提取当前登录用户的id
-        user_id = session.get("user_id")
 
         # 3. 判断之前是否已经关注过
         news_author = db.session.query(User).filter(User.id == news_author_id).first()
@@ -44,6 +45,7 @@ def follow():
             return jsonify(ret)
 
         except Exception as ret:
+            db.session.rollback()
             ret = {
                 "errno": 3003,
                 "errmsg": "关注失败..."
@@ -53,9 +55,24 @@ def follow():
 
     else:
         # 取消关注
-        ret = {
-            "error": 0,
-            "errmsg": "取消关注成功"
-        }
 
-        return jsonify(ret)
+        try:
+            follow = db.session.query(Follow).filter(Follow.followed_id == news_author_id, Follow.follower_id == user_id).first()
+            db.session.delete(follow)
+            db.session.commit()
+
+            ret = {
+                "error": 0,
+                "errmsg": "取消关注成功"
+            }
+
+            return jsonify(ret)
+
+        except Exception as ret:
+            db.session.rollback()
+            ret = {
+                "error": 3004,
+                "errmsg": "取消关注失败..."
+            }
+
+            return jsonify(ret)
