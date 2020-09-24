@@ -193,6 +193,7 @@ $(function(){
                 }else {
                     $("#register-password-err").html(resp.errmsg);
                     $("#register-password-err").show();
+                    generateImageCode();
                 }
             }
         })

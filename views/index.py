@@ -43,8 +43,18 @@ def news_list():
 
 @index_blu.route("/detail/<int:news_id>")
 def detail(news_id):
+    # 根据id找到这篇新闻
     news = db.session.query(News).filter(News.id == news_id).first()
+
     # 提取session，以验证用户是否登录成
     user_id = session.get("user_id")
     nick_name = session.get("nick_name")
-    return render_template("detail.html", news=news, nick_name=nick_name)
+
+    # 既然News模型类中已经添加了与User模型类关联的代码，即relationship那句话，此时就意味着可以通过News对象找到对应User对象
+    # 根据news对象，找作者
+    # print(news.user.nick_name)
+    news_author = news.user
+    news_author.news_num = news_author.news.count()
+    news_author.followers_num = news_author.followers.count()
+
+    return render_template("detail.html", news=news, nick_name=nick_name, news_author=news_author)

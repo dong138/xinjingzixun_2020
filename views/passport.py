@@ -23,6 +23,14 @@ def register():
     password = request.json.get("password")
     smscode = request.json.get("smscode")
 
+    # 判断验证码是否正确，如果不正确，直接返回对应的提示
+    print("=====>", image_code, session['image_code'])
+    if image_code.lower() != session['image_code'].lower():
+        return jsonify({
+            "errno": 1003,
+            "errmsg": "验证码不正确..."
+        })
+
     # 2. 创建User模型类对象，添加属性
     # 2.1 判断是否存在相同的手机号
     if db.session.query(User).filter(User.mobile == mobile).first():
@@ -92,8 +100,20 @@ def logout():
 
 @passport_blu.route("/passport/image_code")
 def image_code():
-    with open("./yanzhengma.png", "rb") as f:
-        image_content = f.read()
+    # with open("./yanzhengma.png", "rb") as f:
+    #     image_content = f.read()
+
+    # 调用第三方的包，生成一个随机数的验证码
+    # 真正的生成一张图片数据
+    from utils.captcha.captcha import captcha
+
+    # 生成验证码
+    # hash值  验证码值  图片内容
+    name, text, image_content = captcha.generate_captcha()
+
+    print("刚刚生成的验证码：", text)
+
+    session['image_code'] = text  # 存储到session中，也就是说只要是这个用户访问，此时image_code就是整个值，不用的同行得到的是自己需要的值
 
     # 返回响应内容
     resp = make_response(image_content)
