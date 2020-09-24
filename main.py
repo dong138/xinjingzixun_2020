@@ -2,7 +2,7 @@ from flask import Flask
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 
-from views import index_blu,passport_blu
+from views import index_blu, passport_blu, user_blu
 from models import db
 from utils.common import show_top_6_news_style
 
@@ -15,6 +15,7 @@ app.config.from_pyfile("config.ini")
 # 创建蓝图，且注册到app
 app.register_blueprint(index_blu)
 app.register_blueprint(passport_blu)
+app.register_blueprint(user_blu)
 
 # 初始化数据库
 db.init_app(app)
