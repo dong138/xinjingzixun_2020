@@ -29,7 +29,7 @@
         <!-- 用户登录后显示下面，隐藏上面 -->
         <div class="user_login fr">
             <img src="/static/index/images/person01.png" class="lgin_pic">
-            <a href="#">{{ nick_name }}</a>
+            <a href="{{ url_for('user_blu.user_center') }}">{{ nick_name }}</a>
             <a href="/passport/logout">退出</a>
         </div>
         {% endif %}
