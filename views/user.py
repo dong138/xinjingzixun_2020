@@ -129,9 +129,35 @@ def user_pass_info():
 
 @user_blu.route("/user/password", methods=["POST"])
 def user_password():
-    ret = {
-        "errno": 0,
-        "errmsg": "修改成功..."
-    }
+    # 1. 提取旧密码以及新密码
+    new_password = request.json.get("new_password")
+    old_password = request.json.get("old_password")
 
+    # 2. 提取当前用户的id
+    user_id = session.get("user_id")
+    if not user_id:
+        return jsonify({
+            "errno": 4001,
+            "errmsg": "请先登录"
+        })
+
+    # 2. 判断旧密码与数据中的当前存储的密码是否相同
+    user = db.session.query(User).filter(User.id == user_id, User.password_hash == old_password).first()
+
+    # 3. 如果相同，则修改
+    if user:
+        user.password_hash = new_password
+        db.session.commit()
+        ret = {
+            "errno": 0,
+            "errmsg": "修改成功"
+        }
+
+    else:
+        ret = {
+            "errno": 4004,
+            "errmsg": "原密码错误！"
+        }
+
+    # 4. 返回json
     return jsonify(ret)
