@@ -88,3 +88,6 @@ def user_base_info():
     return render_template("user_base_info.html")
 
 
+@user_blu.route("/user/basic", methods=["POST"])
+def user_basic():
+    return "测试..."
