@@ -81,3 +81,8 @@ def follow():
 @user_blu.route("/user/center")
 def user_center():
     return render_template("user.html")
+
+
+@user_blu.route("/user/user_base_info.html")
+def user_base_info():
+    return render_template("user_base_info.html")
