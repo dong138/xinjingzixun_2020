@@ -56,5 +56,6 @@ def detail(news_id):
     news_author = news.user
     news_author.news_num = news_author.news.count()
     news_author.followers_num = news_author.followers.count()
+    news_author.can_follow = user_id not in [x.id for x in news_author.followers]
 
     return render_template("detail.html", news=news, nick_name=nick_name, news_author=news_author)

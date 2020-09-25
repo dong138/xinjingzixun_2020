@@ -152,8 +152,11 @@
                 <div class="author_resume">{{ news_author.signature }}</div>
                 <div class="writings"><span>总篇数</span><b>{{ news_author.news_num }}</b></div>
                 <div class="follows"><span>粉丝</span><b>{{ news_author.followers_num }}</b></div>
-                <a href="javascript:;" class="focus fr">关注</a>
+                {% if news_author.can_follow %}
+                <a href="javascript:;" class="focus fr" data-user-id="{{ news_author.id }}">关注</a>
+                {% else %}
                 <a href="javascript:;" class="focused fr"><span class="out">已关注</span><span class="over">取消关注</span></a>
+                {% endif %}
             </div>            
             <div class="rank_title">
                 <h3>点击排行</h3>
