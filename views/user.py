@@ -120,3 +120,8 @@ def user_basic():
         "errmsg": "修改成功..."
     }
     return jsonify(ret)
+
+
+@user_blu.route("/user/user_pass_info")
+def user_pass_info():
+    return render_template("user_pass_info.html")
