@@ -90,6 +90,31 @@ def user_base_info():
 
 @user_blu.route("/user/basic", methods=["POST"])
 def user_basic():
+    # 获取用户的新的信息
+    nick_name = request.json.get("nick_name")
+    signature = request.json.get("signature")
+    gender = request.json.get("gender")
+
+    # 获取当前用户的信息
+    user_id = session.get("user_id")
+
+    # 存储到数据库
+    user = db.session.query(User).filter(User.id == user_id).first()
+    if not user:
+        ret = {
+            "errno": 4002,
+            "errmsg": "没有此用户"
+        }
+
+        return jsonify(ret)
+
+    # 如果查询到此用户就修改数据
+    user.nick_name = nick_name
+    user.signature = signature
+    user.gender = gender
+
+    db.session.commit()
+
     ret = {
         "errno": 0,
         "errmsg": "修改成功..."
