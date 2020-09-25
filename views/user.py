@@ -125,3 +125,13 @@ def user_basic():
 @user_blu.route("/user/user_pass_info")
 def user_pass_info():
     return render_template("user_pass_info.html")
+
+
+@user_blu.route("/user/password", methods=["POST"])
+def user_password():
+    ret = {
+        "errno": 0,
+        "errmsg": "修改成功..."
+    }
+
+    return jsonify(ret)
