@@ -187,11 +187,20 @@ def user_avatar():
         file_hash.update((f.filename + time.ctime()).encode("utf-8"))
         file_name = file_hash.hexdigest() + f.filename[f.filename.rfind("."):]
 
+        avatar_url = file_name
+
         # 将路径改为static/upload下
         file_name = "./static/upload/" + file_name
 
         # 用新的随机的名字当做图片的名字
         f.save(file_name)
+
+        # 修改数据库中用户的头像链接（注意，图片时不放在数据库中的，数据库中存放的图片的名字或者路径加图片名）
+        user_id = session.get("user_id")
+        user = db.session.query(User).filter(User.id == user_id).first()
+        user.avatar_url = avatar_url
+        db.session.commit()
+
         ret = {
             "errno": 0,
             "errmsg": "成功"
