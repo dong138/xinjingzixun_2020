@@ -176,9 +176,18 @@ def user_pic_info():
 
 @user_blu.route("/user/avatar", methods=["POST"])
 def user_avatar():
-    ret = {
-        "errno": 0,
-        "errmsg": "成功"
-    }
+    f = request.files.get("avatar")
+    if f:
+        print(f.filename)
+        f.save("./123.png")
+        ret = {
+            "errno": 0,
+            "errmsg": "成功"
+        }
+    else:
+        ret = {
+            "errno": 4003,
+            "errmsg": "上传失败"
+        }
 
     return jsonify(ret)
