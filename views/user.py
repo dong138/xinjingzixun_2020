@@ -172,3 +172,13 @@ def user_password():
 @user_blu.route("/user/user_pic_info.html")
 def user_pic_info():
     return render_template("user_pic_info.html")
+
+
+@user_blu.route("/user/avatar", methods=["POST"])
+def user_avatar():
+    ret = {
+        "errno": 0,
+        "errmsg": "成功"
+    }
+
+    return jsonify(ret)
