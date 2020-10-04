@@ -220,4 +220,9 @@ def user_avatar():
 
 @user_blu.route("/user/user_follow.html")
 def user_follow():
-    return render_template("user_follow.html")
+    user_id = session.get("user_id")
+    user = db.session.query(User).filter(User.id == user_id).first()
+
+    paginate = user.followers.paginate(1, 2, False)
+
+    return render_template("user_follow.html", paginate=paginate)
