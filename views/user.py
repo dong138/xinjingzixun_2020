@@ -1,3 +1,6 @@
+import hashlib
+import time
+
 from flask import jsonify, session, request, render_template, redirect, url_for
 
 from models import db
@@ -178,8 +181,13 @@ def user_pic_info():
 def user_avatar():
     f = request.files.get("avatar")
     if f:
-        print(f.filename)
-        f.save("./123.png")
+        # print(f.filename)
+        # 为了防止多个用户上传的图片名字相同，需要将用户的图片计算出一个随机的用户名，防止冲突
+        file_hash = hashlib.md5()
+        file_hash.update((f.filename+time.ctime()).encode("utf-8"))
+        file_name = file_hash.hexdigest() + f.filename[f.filename.rfind("."):]
+        # 用新的随机的名字当做图片的名字
+        f.save(file_name)
         ret = {
             "errno": 0,
             "errmsg": "成功"
