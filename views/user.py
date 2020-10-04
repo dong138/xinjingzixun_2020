@@ -167,3 +167,8 @@ def user_password():
 
     # 4. 返回json
     return jsonify(ret)
+
+
+@user_blu.route("/user/user_pic_info.html")
+def user_pic_info():
+    return render_template("user_pic_info.html")
