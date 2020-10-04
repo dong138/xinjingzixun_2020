@@ -184,8 +184,12 @@ def user_avatar():
         # print(f.filename)
         # 为了防止多个用户上传的图片名字相同，需要将用户的图片计算出一个随机的用户名，防止冲突
         file_hash = hashlib.md5()
-        file_hash.update((f.filename+time.ctime()).encode("utf-8"))
+        file_hash.update((f.filename + time.ctime()).encode("utf-8"))
         file_name = file_hash.hexdigest() + f.filename[f.filename.rfind("."):]
+
+        # 将路径改为static/upload下
+        file_name = "./static/upload/" + file_name
+
         # 用新的随机的名字当做图片的名字
         f.save(file_name)
         ret = {
