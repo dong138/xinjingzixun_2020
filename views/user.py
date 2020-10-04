@@ -216,3 +216,8 @@ def user_avatar():
         }
 
     return jsonify(ret)
+
+
+@user_blu.route("/user/user_follow.html")
+def user_follow():
+    return render_template("user_follow.html")
