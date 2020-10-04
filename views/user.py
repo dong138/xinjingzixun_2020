@@ -83,13 +83,15 @@ def follow():
 
 @user_blu.route("/user/center")
 def user_center():
+    user_id = session.get("user_id")
+    user = db.session.query(User).filter(User.id == user_id).first()
     nick_name = session.get("nick_name")
 
     # 如果用户未登录，禁止访问用户中心
     if not nick_name:
         return redirect(url_for('index_blu.index'))
 
-    return render_template("user.html", nick_name=nick_name)
+    return render_template("user.html", nick_name=nick_name, user=user)
 
 
 @user_blu.route("/user/user_base_info")
