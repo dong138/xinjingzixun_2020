@@ -14,7 +14,7 @@
 		<div class="header">
 			<a href="#" class="logo fl"><img src="/static/index/images/logo.png" alt="logo"></a>
 			<div class="user_login fr" style="display: block;">
-				<img src="/static/upload/{{ user.avatar_url }}" class="lgin_pic">
+				<img src="{{ user.avatar_url }}" class="lgin_pic">
 				<a href="{{ url_for('user_blu.user_center') }}">{{ nick_name }}</a>
 				<a href="{{ url_for('passport_blu.logout') }}">退出</a>
 			</div>
@@ -24,7 +24,7 @@
 	<div class="conter_con">
 		<div class="user_menu_con fl">
 			<div class="user_center_pic">
-				<img src="/static/upload/{{ user.avatar_url }}" alt="用户图片">
+				<img src="{{ user.avatar_url }}" alt="用户图片">
 			</div>
 			<div class="user_center_name">{{ nick_name }}</div>
 
