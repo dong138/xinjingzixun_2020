@@ -1,3 +1,6 @@
+import hashlib
+import time
+
 from flask import jsonify, request, session, render_template
 
 from models import db
@@ -46,7 +49,9 @@ def follow():
 
 @user_blu.route("/user/user_center")
 def user_center():
-    return render_template("user.html")
+    user_id = session.get("user_id")
+    user = db.session.query(User).filter(User.id == user_id).first()
+    return render_template("user.html", user=user)
 
 
 @user_blu.route("/user/user_base_info.html")
@@ -129,3 +134,66 @@ def user_password():
 
     # 5. 返回对应数据
     return jsonify(ret)
+
+
+@user_blu.route("/user/user_pic_info.html")
+def user_pic_info():
+    user_id = session.get("user_id")
+    user = db.session.query(User).filter(User.id == user_id).first()
+    return render_template("user_pic_info.html", user=user)
+
+
+@user_blu.route("/user/avatar", methods=["POST"])
+def user_avatar():
+    # 1. 提取用户上传的图片
+    # request.args.get()
+    # request.form.get()
+    # request.json.get()
+    f = request.files.get("avatar")
+    if not f:
+        return jsonify({
+            "errno": 4003,
+            "errmsg": "失败"
+        })
+
+    print('---->', f.filename)
+
+    # h = hashlib.md5()
+    # h.update((f.filename + str(time.time())).encode("utf-8"))  # 不同用户上传的文件名可能相同，但是时间点一定不同，此时加密的内容就一定不同，从而一定得到不相同的名字
+    # hash_val = h.hexdigest()
+
+    user_id = session.get("user_id")
+
+    if not user_id:
+        return jsonify({
+            "errno": 4004,
+            "errmsg": "未登录..."
+        })
+
+    # 2. 将用户上传的图片存储
+    new_file_name = str(user_id) + f.filename[f.filename.rfind("."):]
+    f.save("./static/upload/%s" % new_file_name)
+
+    # 3. 修改数据库中这个用户的头像信息
+    user_id = session.get("user_id")
+    user = db.session.query(User).filter(User.id == user_id).first()
+    user.avatar_url = new_file_name
+    db.session.commit()
+
+    # 4. 返回信息给前端
+    ret = {
+        "errno": 0,
+        "errmsg": "上传头像成功"
+    }
+
+    return jsonify(ret)
+
+
+@user_blu.route("/user/user_follow.html")
+def user_follow():
+    # 提取页数
+    page = int(request.args.get("page", 1))
+    user_id = session.get("user_id")
+    user = db.session.query(User).filter(User.id == user_id).first()
+    paginate = user.followers.paginate(page, 2, False)  # 查询当前用户所有的粉丝中的第1页
+    return render_template("user_follow.html", paginate=paginate)

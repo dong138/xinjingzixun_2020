@@ -1,68 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>用户中心</title>
-	<link rel="stylesheet" type="text/css" href="../css/reset.css">
-    <link rel="stylesheet" type="text/css" href="../css/jquery.pagination.css">
-    <link rel="stylesheet" type="text/css" href="../css/main.css">
-    <script type="text/javascript" src="../js/jquery-1.12.4.min.js"></script>
-	<script type="text/javascript" src="../js/jquery.pagination.min.js"></script>
-    <script type="text/javascript" src="../js/user_follow.js"></script>
+    <meta charset="UTF-8">
+    <title>用户中心</title>
+    <link rel="stylesheet" type="text/css" href="/static/index/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/static/index/css/jquery.pagination.css">
+    <link rel="stylesheet" type="text/css" href="/static/index/css/main.css">
+    <script type="text/javascript" src="/static/index/js/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="/static/index/js/jquery.pagination.min.js"></script>
+    <script type="text/javascript" src="/static/index/js/user_follow.js"></script>
 </head>
 <body class="inframe_body">
-        <h3 class="common_title">我的关注</h3>
-        <ul class="card_list_con">
-            <li class="author_card card_list">
-                <a href="#" target="_blank" class="author_pic"><img src="../images/cat.jpg" alt="author_pic"></a>
-                <a href="#" target="_blank" class="author_name">张大山</a>
-                <div class="author_resume">张大山的简介,张大山</div>
-                <div class="writings"><span>总篇数</span><b>23</b></div>
-                <div class="follows"><span>粉丝</span><b>36</b></div>
-                <a href="javascript:;" class="focus fr">关注</a>
-                <a href="javascript:;" class="focused fr"><span class="out">已关注</span><span class="over">取消关注</span></a>
-            </li>
-            <li class="author_card card_list">
-                <a href="#" target="_blank" class="author_pic"><img src="../images/cat.jpg" alt="author_pic"></a>
-                <a href="#" target="_blank" class="author_name">张大山</a>
-                <div class="author_resume">张大山的简介,张大山</div>
-                <div class="writings"><span>总篇数</span><b>23</b></div>
-                <div class="follows"><span>粉丝</span><b>36</b></div>
-                <a href="javascript:;" class="focus fr">关注</a>
-                <a href="javascript:;" class="focused fr"><span class="out">已关注</span><span class="over">取消关注</span></a>
-            </li>
-            <li class="author_card card_list">
-                <a href="#" target="_blank" class="author_pic"><img src="../images/cat.jpg" alt="author_pic"></a>
-                <a href="#" target="_blank" class="author_name">张大山</a>
-                <div class="author_resume">张大山的简介,张大山</div>
-                <div class="writings"><span>总篇数</span><b>23</b></div>
-                <div class="follows"><span>粉丝</span><b>36</b></div>
-                <a href="javascript:;" class="focus fr">关注</a>
-                <a href="javascript:;" class="focused fr"><span class="out">已关注</span><span class="over">取消关注</span></a>
-            </li>
-            <li class="author_card card_list">
-                <a href="#" target="_blank" class="author_pic"><img src="../images/cat.jpg" alt="author_pic"></a>
-                <a href="#" target="_blank" class="author_name">张大山</a>
-                <div class="author_resume">张大山的简介,张大山</div>
-                <div class="writings"><span>总篇数</span><b>23</b></div>
-                <div class="follows"><span>粉丝</span><b>36</b></div>
-                <a href="javascript:;" class="focus fr">关注</a>
-                <a href="javascript:;" class="focused fr"><span class="out">已关注</span><span class="over">取消关注</span></a>
-            </li>
-        </ul>
-        
-        
-        <div id="pagination" class="page"></div>
-        <script>
-            $(function() {
-                $("#pagination").pagination({
-                    currentPage: 2,
-                    totalPage: 3,
-                    callback: function(current) {
-                        alert('ok!');
-                    }
-                });
-            });
-        </script>
+<h3 class="common_title">我的关注</h3>
+<ul class="card_list_con">
+    {% for user_info in paginate.items %}
+        <li class="author_card card_list">
+            <a href="#" target="_blank" class="author_pic">
+                {% if user_info.avatar_url %}
+                    <img src="/static/upload/{{ user_info.avatar_url }}" alt="author_pic">
+                {% else %}
+                    <img src="/static/index/images/person01.png" alt="author_pic">
+                {% endif %}
+            </a>
+            <a href="#" target="_blank" class="author_name">{{ user_info.nick_name }}</a>
+            <div class="author_resume">{{ user_info.signature }}</div>
+            <div class="writings"><span>总篇数</span><b>{{ user_info.news.count() }}</b></div>
+            <div class="follows"><span>粉丝</span><b>{{ user_info.followers.count() }}</b></div>
+            <a href="javascript:;" class="focus fr">关注</a>
+            <a href="javascript:;" class="focused fr"><span class="out">已关注</span><span class="over">取消关注</span></a>
+        </li>
+    {% endfor %}
+</ul>
+
+
+<div id="pagination" class="page"></div>
+<script>
+    $(function () {
+        $("#pagination").pagination({
+            currentPage: {{ paginate.page }},
+            totalPage: {{ paginate.pages }},
+            callback: function (current) {
+                window.location.href = "/user/user_follow.html?page=" + current
+            }
+        });
+    });
+</script>
 </body>
 </html>

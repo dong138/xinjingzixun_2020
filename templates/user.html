@@ -14,8 +14,8 @@
 		<div class="header">
 			<a href="#" class="logo fl"><img src="/static/index/images/logo.png" alt="logo"></a>
 			<div class="user_login fr" style="display: block;">
-				<img src="/static/index/images/user_pic.png" class="lgin_pic">
-				<a href="#">用户张山</a>
+				<img src="/static/upload/{{ user.avatar_url }}" class="lgin_pic">
+				<a href="#">{{ user.nick_name }}</a>
 				<a href="#">退出</a>
 			</div>
 		</div>
@@ -24,9 +24,9 @@
 	<div class="conter_con">
 		<div class="user_menu_con fl">
 			<div class="user_center_pic">
-				<img src="/static/index/images/user_pic.png" alt="用户图片">
+				<img src="/static/upload/{{ user.avatar_url }}" alt="用户图片">
 			</div>
-			<div class="user_center_name">用户张山</div>
+			<div class="user_center_name">{{ user.nick_name }}</div>
 
 			<ul class="option_list">
 				<li class="active"><a href="user_base_info.html" target="main_frame">基本资料</a></li>
