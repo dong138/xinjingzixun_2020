@@ -5,6 +5,7 @@ from flask import jsonify, session, request, render_template, redirect, url_for
 
 from models import db
 from models.index import User, Follow
+from utils.image_qiniu import upload_image_to_qiniu
 from . import user_blu
 
 
@@ -194,10 +195,13 @@ def user_avatar():
         avatar_url = file_name
 
         # 将路径改为static/upload下
-        file_name = "./static/upload/" + file_name
+        path_file_name = "./static/upload/" + file_name
 
         # 用新的随机的名字当做图片的名字
-        f.save(file_name)
+        f.save(path_file_name)
+
+        # 将这个图片上传到七牛云
+        upload_image_to_qiniu(path_file_name, file_name)
 
         # 修改数据库中用户的头像链接（注意，图片时不放在数据库中的，数据库中存放的图片的名字或者路径加图片名）
         user_id = session.get("user_id")
