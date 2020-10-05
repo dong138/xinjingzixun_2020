@@ -201,12 +201,12 @@ def user_avatar():
         f.save(path_file_name)
 
         # 将这个图片上传到七牛云
-        upload_image_to_qiniu(path_file_name, file_name)
+        qiniu_avatar_url = upload_image_to_qiniu(path_file_name, file_name)
 
         # 修改数据库中用户的头像链接（注意，图片时不放在数据库中的，数据库中存放的图片的名字或者路径加图片名）
         user_id = session.get("user_id")
         user = db.session.query(User).filter(User.id == user_id).first()
-        user.avatar_url = avatar_url
+        user.avatar_url = qiniu_avatar_url
         db.session.commit()
 
         ret = {

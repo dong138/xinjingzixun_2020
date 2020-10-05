@@ -14,13 +14,16 @@ q = Auth(access_key, secret_key)
 # 要上传的空间
 bucket_name = 'xinjingzixun2020'
 
+# url前缀
+url_prefix = "http://qhqapfhv2.hn-bkt.clouddn.com/"
+
 
 def upload_image_to_qiniu(localfile, key):
     """
     上传图片到七牛云
     :param localfile:要上传的文件路径
     :param key:保存到七牛云之后的文件名
-    :return: True表示成功
+    :return: 上传成功之后，图片在七牛云的完整路径 包括http://
     """
     # 上传后保存的文件名
     # key = 'my-python-logo.png'
@@ -36,7 +39,7 @@ def upload_image_to_qiniu(localfile, key):
     assert ret['key'] == key
     assert ret['hash'] == etag(localfile)
 
-    return True
+    return url_prefix + key
 
 
 if __name__ == "__main__":
