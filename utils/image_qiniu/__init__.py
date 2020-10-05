@@ -12,7 +12,7 @@ secret_key = 'y2PBSlCykoz3PU3du3lt7epERRTbVQQ1HrgW27-G'
 q = Auth(access_key, secret_key)
 
 # 要上传的空间
-bucket_name = 'Bucket_Name'
+bucket_name = 'xinjingzixun2020'
 
 # 上传后保存的文件名
 key = 'my-python-logo.png'
@@ -21,7 +21,7 @@ key = 'my-python-logo.png'
 token = q.upload_token(bucket_name, key, 3600)
 
 # 要上传文件的本地路径
-localfile = './sync/bbb.jpg'
+localfile = './bbb.png'
 
 ret, info = put_file(token, key, localfile)
 print(info)
