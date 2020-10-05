@@ -237,9 +237,11 @@ def user_follow():
 
 @user_blu.route("/user/user_collection.html")
 def user_collection():
+    # 获取页码
+    page = int(request.args.get("page", 1))
     # 查询用户
     user_id = session.get("user_id")
     user = db.session.query(User).filter(User.id == user_id).first()
     # 查询用户收藏的文章
-    collection_news = user.collection_news
-    return render_template("user_collection.html", collection_news=collection_news)
+    paginate = user.collection_news.paginate(page, 1, False)
+    return render_template("user_collection.html", paginate=paginate)
