@@ -237,4 +237,9 @@ def user_follow():
 
 @user_blu.route("/user/user_collection.html")
 def user_collection():
-    return render_template("user_collection.html")
+    # 查询用户
+    user_id = session.get("user_id")
+    user = db.session.query(User).filter(User.id == user_id).first()
+    # 查询用户收藏的文章
+    collection_news = user.collection_news
+    return render_template("user_collection.html", collection_news=collection_news)
