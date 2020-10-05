@@ -233,3 +233,8 @@ def user_follow():
     paginate = user.followers.paginate(page, 2, False)
 
     return render_template("user_follow.html", paginate=paginate)
+
+
+@user_blu.route("/user/user_collection.html")
+def user_collection():
+    return render_template("user_collection.html")
