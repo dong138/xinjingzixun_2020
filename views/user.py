@@ -66,7 +66,7 @@ def follow():
             db.session.commit()
 
             ret = {
-                "error": 0,
+                "errno": 0,
                 "errmsg": "取消关注成功"
             }
 
@@ -75,7 +75,7 @@ def follow():
         except Exception as ret:
             db.session.rollback()
             ret = {
-                "error": 3004,
+                "errno": 3004,
                 "errmsg": "取消关注失败..."
             }
 
