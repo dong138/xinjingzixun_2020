@@ -92,7 +92,7 @@ $(function(){
 			$('#main_frame').css({'height':660});
 		}
 		$(this).addClass('active').siblings().removeClass('active');
-		$(this).find('a')[0].click()
+		// $(this).find('a')[0].click()
 	})
 
     // 登录表单提交
