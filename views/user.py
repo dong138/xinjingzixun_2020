@@ -273,6 +273,21 @@ def new_release():
     news.user_id = session.get("user_id")
     news.status = 1  # 1代表 正在审核
 
+    if f:
+        file_hash = hashlib.md5()
+        file_hash.update((f.filename + time.ctime()).encode("utf-8"))
+        file_name = file_hash.hexdigest() + f.filename[f.filename.rfind("."):]
+
+        # 将路径改为static/upload下
+        path_file_name = "./static/upload/" + file_name
+
+        # 用新的随机的名字当做图片的名字
+        f.save(path_file_name)
+
+        # 将这个图片上传到七牛云
+        qiniu_image_url = upload_image_to_qiniu(path_file_name, file_name)
+        news.index_image_url = qiniu_image_url
+
     db.session.add(news)
     db.session.commit()
 
