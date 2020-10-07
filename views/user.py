@@ -211,7 +211,7 @@ def user_avatar():
 
         ret = {
             "errno": 0,
-            "errmsg": "成功"
+            "avatar_url": user.avatar_url
         }
     else:
         ret = {
