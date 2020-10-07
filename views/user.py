@@ -252,3 +252,13 @@ def user_collection():
 def user_news_release():
     category_list = db.session.query(Category).filter(Category.id != 1).all()
     return render_template("user_news_release.html", category_list=category_list)
+
+
+@user_blu.route("/user/release", methods=["POST"])
+def new_release():
+    ret = {
+        "errno": 0,
+        "errmsg": "成功"
+    }
+
+    return jsonify(ret)
