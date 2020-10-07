@@ -297,3 +297,8 @@ def new_release():
     }
 
     return jsonify(ret)
+
+
+@user_blu.route("/user/user_news_list.html")
+def user_news_list():
+    return render_template("user_news_list.html")
