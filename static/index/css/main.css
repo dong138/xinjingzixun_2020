@@ -1358,3 +1358,16 @@ body{
 .ui-pagination-container .ui-pagination-page-item:hover{
     color:#333;
 }
+.back_to_top {
+    width: 40px;
+    height: 40px;
+    background-color: #686a70;
+    color: white;
+    display: block;
+    position: fixed;
+    border-radius: 50%;
+    right: 50px;
+    bottom: 100px;
+    text-align: center;
+    line-height: 40px;
+}
