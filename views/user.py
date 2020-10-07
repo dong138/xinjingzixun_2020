@@ -246,3 +246,8 @@ def user_collection():
     # 查询用户收藏的文章
     paginate = user.collection_news.paginate(page, 1, False)
     return render_template("user_collection.html", paginate=paginate)
+
+
+@user_blu.route("/user/user_news_release.html")
+def user_news_release():
+    return render_template("user_news_release.html")
