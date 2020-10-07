@@ -301,9 +301,11 @@ def new_release():
 
 @user_blu.route("/user/user_news_list.html")
 def user_news_list():
+    # 提取页码
+    page = int(request.args.get("page", 1))
     # 查询当前用户
     user_id = session.get("user_id")
     user = db.session.query(User).filter(User.id == user_id).first()
     # 获取当前用户的所有新闻
-    news = user.news
-    return render_template("user_news_list.html", news=news)
+    news_paginate = user.news.paginate(page, 1, False)
+    return render_template("user_news_list.html", news_paginate=news_paginate)
