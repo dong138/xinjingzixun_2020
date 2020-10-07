@@ -58,4 +58,9 @@ def detail(news_id):
     news_author.followers_num = news_author.followers.count()
     news_author.can_follow = user_id not in [x.id for x in news_author.followers]
 
+    if user_id in [x.id for x in news.collected_user]:  # 判断当前用户的id是否在这篇新闻收藏的用户id中
+        news.can_collect = False
+    else:
+        news.can_collect = True
+
     return render_template("detail.html", news=news, nick_name=nick_name, news_author=news_author)

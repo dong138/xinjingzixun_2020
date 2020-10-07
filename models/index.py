@@ -52,6 +52,13 @@ class Follow(db.Model):
     follower_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)  # 被粉丝id
 
 
+class Collection(db.Model):
+    __tablename__ = "collection"
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)  # 新闻编号
+    news_id = db.Column(db.Integer, db.ForeignKey("news.id"), primary_key=True)  # 分类编号
+    create_time = db.Column(db.DateTime, default=datetime.now)  # 收藏创建时间
+
+
 class User(db.Model):
     """用户"""
     __tablename__ = "user"
@@ -79,3 +86,8 @@ class User(db.Model):
                                 secondaryjoin=(id == Follow.follower_id),
                                 backref=db.backref('followed', lazy='dynamic'),
                                 lazy='dynamic')
+
+    collection_news = db.relationship("News",
+                                      secondary=Collection.__table__,
+                                      backref=db.backref('collected_user', lazy='dynamic'),
+                                      lazy='dynamic')

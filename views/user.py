@@ -1,10 +1,11 @@
 import hashlib
 import time
 
-from flask import jsonify, request, session, render_template
+from flask import jsonify, request, session, render_template, url_for, redirect
 
 from models import db
 from models.index import Follow, User
+from utils.image_qiniu import upload_image_to_qiniu
 from . import user_blu
 
 
@@ -172,12 +173,15 @@ def user_avatar():
 
     # 2. 将用户上传的图片存储
     new_file_name = str(user_id) + f.filename[f.filename.rfind("."):]
-    f.save("./static/upload/%s" % new_file_name)
+    path_file_name = "./static/upload/%s" % new_file_name
+    f.save(path_file_name)
+
+    qiniu_image_url = upload_image_to_qiniu(path_file_name, new_file_name)  # 上传到七牛云服务器
 
     # 3. 修改数据库中这个用户的头像信息
     user_id = session.get("user_id")
     user = db.session.query(User).filter(User.id == user_id).first()
-    user.avatar_url = new_file_name
+    user.avatar_url = qiniu_image_url
     db.session.commit()
 
     # 4. 返回信息给前端
@@ -197,3 +201,19 @@ def user_follow():
     user = db.session.query(User).filter(User.id == user_id).first()
     paginate = user.followers.paginate(page, 2, False)  # 查询当前用户所有的粉丝中的第1页
     return render_template("user_follow.html", paginate=paginate)
+
+
+@user_blu.route("/user/user_collection.html")
+def user_collection():
+    # 提取页码
+    page = int(request.args.get("page", 1))
+
+    user_id = session.get("user_id")
+    if not user_id:
+        return redirect(url_for("index.index"))
+
+    # 提取当前登录的用户
+    user = db.session.query(User).filter(User.id == user_id).first()
+    paginate = user.collection_news.paginate(page, 1, False)
+
+    return render_template("user_collection.html", paginate=paginate)
