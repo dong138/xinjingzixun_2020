@@ -256,6 +256,14 @@ def user_news_release():
 
 @user_blu.route("/user/release", methods=["POST"])
 def new_release():
+    title = request.form.get("title")
+    category = request.form.get("category")
+    digest = request.form.get("digest")
+    content = request.form.get("content")
+    f = request.files.get("index_image")
+
+    print(title, category, digest, content, f)
+
     ret = {
         "errno": 0,
         "errmsg": "成功"
