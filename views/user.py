@@ -4,7 +4,7 @@ import time
 from flask import jsonify, session, request, render_template, redirect, url_for
 
 from models import db
-from models.index import User, Follow
+from models.index import User, Follow, Category
 from utils.image_qiniu import upload_image_to_qiniu
 from . import user_blu
 
@@ -250,4 +250,5 @@ def user_collection():
 
 @user_blu.route("/user/user_news_release.html")
 def user_news_release():
-    return render_template("user_news_release.html")
+    category_list = db.session.query(Category).filter(Category.id != 1).all()
+    return render_template("user_news_release.html", category_list=category_list)
