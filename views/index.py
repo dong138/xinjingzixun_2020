@@ -50,6 +50,9 @@ def detail(news_id):
     # 根据news_id查询这个新闻的详情
     news = db.session.query(News).filter(News.id == news_id).first()
 
+    #查询点击量最多的6个新闻信息
+    click_detail_news_sex = db.session.query(News).order_by(-News.clicks).limit(6)
+
     # 查询这个新闻的作者
     news_author = news.user
     news_author.news_num = news_author.news.count()
@@ -73,4 +76,4 @@ def detail(news_id):
     else:
         news.can_collect = True  # 可以收藏
 
-    return render_template("detail.html", news=news, nick_name=nick_name, news_author=news_author)
+    return render_template("detail.html", news=news, nick_name=nick_name, news_author=news_author,click_detail_news_sex=click_detail_news_sex)
