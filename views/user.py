@@ -164,6 +164,7 @@ def user_password():
             "errno": 0,
             "errmsg": "修改成功"
         }
+        session.clear()
 
     else:
         ret = {

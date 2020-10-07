@@ -52,6 +52,7 @@ $(function () {
                 if (resp.errno == "0") {
                     // `修改密码`成功
                     $(".error_tip").html('修改成功').show();
+                    parent.location.reload('index.html')
                 }
                 else {
                     // `修改密码`失败
