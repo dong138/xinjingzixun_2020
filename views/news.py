@@ -48,3 +48,12 @@ def news_collect():
             }
 
     return jsonify(ret)
+
+
+@news_blu.route("/news/comment", methods=["POST"])
+def news_comment():
+    ret = {
+        "errno": 0,
+        "errmsg": "成功"
+    }
+    return jsonify(ret)
