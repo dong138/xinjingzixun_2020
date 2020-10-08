@@ -96,3 +96,14 @@ class User(db.Model):
                                       secondary=Collection.__table__,
                                       backref=db.backref('collected_user', lazy='dynamic'),
                                       lazy='dynamic')
+
+
+class Comment(db.Model):
+    """评论"""
+    __tablename__ = "comment"
+    id = db.Column(db.Integer, primary_key=True)  # 评论编号
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)  # 用户id
+    news_id = db.Column(db.Integer, db.ForeignKey("news.id"), nullable=False)  # 新闻id
+    content = db.Column(db.Text, nullable=False)  # 评论内容
+    create_time = db.Column(db.DateTime, default=datetime.now)  # 记录的创建时间
+    update_time = db.Column(db.DateTime, default=datetime.now)  # 记录的更新时间
