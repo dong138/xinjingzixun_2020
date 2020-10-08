@@ -115,7 +115,7 @@ class Comment(db.Model):
     parent_id = db.Column(db.Integer, db.ForeignKey("comment.id"))  # 父评论id
     parent = db.relationship("Comment", remote_side=id)  # 自关联
     # 点赞的用户
-    like_user = db.relationship("User", secondary="comment_like", lazy='dynamic')
+    like_user = db.relationship("User", secondary="comment_like", lazy='dynamic', backref="like_comment")
 
 
 class CommentLike(db.Model):

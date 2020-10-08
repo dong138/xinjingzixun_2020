@@ -99,7 +99,11 @@
                 </div>
                 {% endif %}
                 <div class="comment_time fl">{{ comment.create_time }}</div>
+                {% if comment in like_comment %}
                 <a href="javascript:;" class="comment_up has_comment_up fr">{{ comment.like_user.count() }}</a>
+                {% else %}
+                <a href="javascript:;" class="comment_up fr">{{ comment.like_user.count() }}</a>
+                {% endif %}
                 <a href="javascript:;" class="comment_reply fr">回复</a>
                 <from class="reply_form fl" data-news-id="{{ news.id }}" data-comment-id="{{ comment.id }}">
                     <textarea  class="reply_input"></textarea>
