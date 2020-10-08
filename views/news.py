@@ -55,6 +55,7 @@ def news_comment():
     # 1. 提取出用户评价时的数据
     content = request.json.get("content")
     news_id = request.json.get("news_id")
+    parent_id = request.json.get("parent_id")
     user_id = session.get("user_id")
 
     # 2. 保存到数据库
@@ -62,6 +63,7 @@ def news_comment():
     new_comment.news_id = news_id
     new_comment.user_id = user_id
     new_comment.content = content
+    new_comment.parent_id = parent_id
     db.session.add(new_comment)
     db.session.commit()
 
