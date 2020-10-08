@@ -114,3 +114,16 @@ class Comment(db.Model):
     # 实现对评论的回复（其实就是自关联）
     parent_id = db.Column(db.Integer, db.ForeignKey("comment.id"))  # 父评论id
     parent = db.relationship("Comment", remote_side=id)  # 自关联
+    # 点赞的用户
+    like_user = db.relationship("User", secondary="comment_like", lazy='dynamic')
+
+
+class CommentLike(db.Model):
+    """
+    评论点赞
+    评论表 与 用户表之间是多对多关系，因为一个评论可以被多个用户点赞，一个用户也可以点赞多个评论
+    所以，此表就相当于Comment与User的 中间表
+    """
+    __tablename__ = "comment_like"
+    comment_id = db.Column("comment_id", db.Integer, db.ForeignKey("comment.id"), primary_key=True)  # 评论编号
+    user_id = db.Column("user_id", db.Integer, db.ForeignKey("user.id"), primary_key=True)  # 用户编号
