@@ -1,7 +1,7 @@
 from flask import render_template, jsonify, request, session
 
 from models import db
-from models.index import News
+from models.index import News, Comment
 
 from . import index_blu
 
@@ -76,4 +76,7 @@ def detail(news_id):
     else:
         news.can_collect = True  # 可以收藏
 
-    return render_template("detail.html", news=news, nick_name=nick_name, news_author=news_author,click_detail_news_sex=click_detail_news_sex)
+    # 获取评论
+    comments = news.comments.order_by(-Comment.create_time)
+
+    return render_template("detail.html", news=news, nick_name=nick_name, news_author=news_author,click_detail_news_sex=click_detail_news_sex, comments=comments)
