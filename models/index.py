@@ -111,3 +111,6 @@ class Comment(db.Model):
     update_time = db.Column(db.DateTime, default=datetime.now)  # 记录的更新时间
     # 评论的创建者
     user = db.relationship("User", backref="comments")
+    # 实现对评论的回复（其实就是自关联）
+    parent_id = db.Column(db.Integer, db.ForeignKey("comment.id"))  # 父评论id
+    parent = db.relationship("Comment", remote_side=id)  # 自关联
