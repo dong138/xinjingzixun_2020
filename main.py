@@ -4,7 +4,7 @@ from flask_script import Manager
 
 from views import index_blu, passport_blu, user_blu, news_blu
 from models import db
-from utils.common import show_clicks_top_6_news
+from utils.common import show_clicks_top_6_news, show_news_status, show_news_status_class_name
 
 # 创建flask对象
 app = Flask(__name__)
@@ -23,6 +23,8 @@ db.init_app(app)
 
 # 添加自定义过滤器
 app.add_template_filter(show_clicks_top_6_news)
+app.add_template_filter(show_news_status)
+app.add_template_filter(show_news_status_class_name)
 
 # 添加数据库迁移等工具
 manager = Manager(app)

@@ -4,7 +4,7 @@ import time
 from flask import jsonify, request, session, render_template, url_for, redirect
 
 from models import db
-from models.index import Follow, User
+from models.index import Follow, User, Category, News
 from utils.image_qiniu import upload_image_to_qiniu
 from . import user_blu
 
@@ -217,3 +217,71 @@ def user_collection():
     paginate = user.collection_news.paginate(page, 1, False)
 
     return render_template("user_collection.html", paginate=paginate)
+
+
+@user_blu.route("/user/user_news_release.html")
+def user_news_release():
+    category = db.session.query(Category).filter(Category.id != 1).all()
+    return render_template("user_news_release.html", category=category)
+
+
+@user_blu.route("/user/release", methods=["POST"])
+def news_release():
+    # 提取数据
+    title = request.form.get("title")
+    category_id = request.form.get("category_id")
+    digest = request.form.get("digest")
+    f = request.files.get("index_image_url")
+    content = request.form.get("content")
+
+    qiniu_image_url = ""
+    if f:
+        # 计算一个哈希值
+        h = hashlib.md5()
+        h.update((f.filename + str(time.time())).encode())
+        hash_val = h.hexdigest()
+
+        # 保存用户上传的图片
+        new_file_name = hash_val + f.filename[f.filename.rfind("."):]
+        path_file_name = "./static/upload/%s" % new_file_name
+        f.save(path_file_name)
+
+        # 将图片上传到七牛云服务器
+        qiniu_image_url = upload_image_to_qiniu(path_file_name, new_file_name)  # 上传到七牛云服务器
+
+    # 简单验证数据
+    print(title, category_id, digest, f, content)
+
+    # 创建一个新闻对象（模型类对象），添加到数据库
+    news = News()
+    news.title = title
+    news.source = "xxx网站"
+    news.digest = digest
+    news.content = content
+    news.index_image_url = qiniu_image_url
+    news.status = 1
+    news.user_id = session.get("user_id")
+    news.category_id = int(category_id)
+
+    db.session.add(news)
+    db.session.commit()
+
+    ret = {
+        "errno": 0,
+        "errmsg": "成功"
+    }
+    return jsonify(ret)
+
+
+@user_blu.route("/user/user_news_list.html")
+def user_news_list():
+    # 获取页码
+    page = int(request.args.get("page", 1))
+    # 查询当前用户
+    user_id = session.get("user_id")
+    user = db.session.query(User).filter(User.id == user_id).first()
+
+    # 查询当前用户的所有的新闻
+    news_paginate = user.news.paginate(page, 1, False)
+
+    return render_template("user_news_list.html", news_paginate=news_paginate)
