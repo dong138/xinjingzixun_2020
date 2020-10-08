@@ -109,3 +109,5 @@ class Comment(db.Model):
     content = db.Column(db.Text, nullable=False)  # 评论内容
     create_time = db.Column(db.DateTime, default=datetime.now)  # 记录的创建时间
     update_time = db.Column(db.DateTime, default=datetime.now)  # 记录的更新时间
+    # 评论的创建者
+    user = db.relationship("User", backref="comments")
