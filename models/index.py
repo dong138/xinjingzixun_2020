@@ -23,6 +23,8 @@ class News(db.Model):
     user = db.relationship('User', backref=db.backref('news', lazy='dynamic'))
 
     category = db.relationship('Category', backref='news')
+    # 当前新闻的所有评论
+    comments = db.relationship("Comment", lazy="dynamic")
 
     def to_dict(self):
         """
