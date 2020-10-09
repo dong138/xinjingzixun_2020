@@ -1,7 +1,7 @@
 from flask import render_template, jsonify, request, session
 
 from models import db
-from models.index import News
+from models.index import News, Comment, User
 
 from . import index_blu
 
@@ -63,4 +63,11 @@ def detail(news_id):
     else:
         news.can_collect = True
 
-    return render_template("detail.html", news=news, nick_name=nick_name, news_author=news_author)
+    # 查询当前新闻的所有评论，以创建时间进行倒叙排序
+    comments = news.comments.order_by(-Comment.create_time)
+
+    # 提取当前用户所有的点过赞的评论
+    user = db.session.query(User).filter(User.id == user_id).first()
+    user_like_comments = user.like_comment  # 提取当前用户所有点过赞的评论
+
+    return render_template("detail.html", news=news, nick_name=nick_name, news_author=news_author, comments=comments, user_like_comments=user_like_comments)

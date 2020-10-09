@@ -1,7 +1,7 @@
 from flask import jsonify, request, session
 
 from models import db
-from models.index import Collection
+from models.index import Collection, Comment
 from . import news_blu
 
 
@@ -35,4 +35,29 @@ def news_collect():
             "errmsg": "成功"
         }
 
+    return jsonify(ret)
+
+
+@news_blu.route("/news/comment", methods=["POST"])
+def news_comment():
+    # 提取需要的数据
+    news_id = request.json.get("news_id")
+    parent_id = request.json.get("parent_id")
+    content = request.json.get("content")
+    user_id = session.get("user_id")
+
+    # 创建一个Comment对象
+    new_comment = Comment()
+    new_comment.user_id = user_id
+    new_comment.news_id = news_id
+    new_comment.content = content
+    new_comment.parent_id = parent_id
+
+    db.session.add(new_comment)
+    db.session.commit()
+
+    ret = {
+        "errno": 0,
+        "errmsg": "成功"
+    }
     return jsonify(ret)
