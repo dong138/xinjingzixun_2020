@@ -92,12 +92,12 @@ def user_center():
     if not nick_name:
         return redirect(url_for('index_blu.index'))
 
-    return render_template("user.html", nick_name=nick_name, user=user)
+    return render_template("index/user.html", nick_name=nick_name, user=user)
 
 
 @user_blu.route("/user/user_base_info")
 def user_base_info():
-    return render_template("user_base_info.html")
+    return render_template("index/user_base_info.html")
 
 
 @user_blu.route("/user/basic", methods=["POST"])
@@ -136,7 +136,7 @@ def user_basic():
 
 @user_blu.route("/user/user_pass_info")
 def user_pass_info():
-    return render_template("user_pass_info.html")
+    return render_template("index/user_pass_info.html")
 
 
 @user_blu.route("/user/password", methods=["POST"])
@@ -180,7 +180,7 @@ def user_password():
 def user_pic_info():
     user_id = session.get("user_id")
     user = db.session.query(User).filter(User.id == user_id).first()
-    return render_template("user_pic_info.html", user=user)
+    return render_template("index/user_pic_info.html", user=user)
 
 
 @user_blu.route("/user/avatar", methods=["POST"])
@@ -233,7 +233,7 @@ def user_follow():
 
     paginate = user.followers.paginate(page, 2, False)
 
-    return render_template("user_follow.html", paginate=paginate)
+    return render_template("index/user_follow.html", paginate=paginate)
 
 
 @user_blu.route("/user/user_collection.html")
@@ -245,13 +245,13 @@ def user_collection():
     user = db.session.query(User).filter(User.id == user_id).first()
     # 查询用户收藏的文章
     paginate = user.collection_news.paginate(page, 1, False)
-    return render_template("user_collection.html", paginate=paginate)
+    return render_template("index/user_collection.html", paginate=paginate)
 
 
 @user_blu.route("/user/user_news_release.html")
 def user_news_release():
     category_list = db.session.query(Category).filter(Category.id != 1).all()
-    return render_template("user_news_release.html", category_list=category_list)
+    return render_template("index/user_news_release.html", category_list=category_list)
 
 
 @user_blu.route("/user/release", methods=["POST"])
@@ -308,4 +308,4 @@ def user_news_list():
     user = db.session.query(User).filter(User.id == user_id).first()
     # 获取当前用户的所有新闻
     news_paginate = user.news.paginate(page, 1, False)
-    return render_template("user_news_list.html", news_paginate=news_paginate)
+    return render_template("index/user_news_list.html", news_paginate=news_paginate)
