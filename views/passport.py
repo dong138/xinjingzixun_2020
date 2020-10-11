@@ -120,3 +120,13 @@ def image_code():
     resp.headers['Content-Type'] = 'image/png'
 
     return resp
+
+
+@passport_blu.route("/passport/smscode", methods=["POST"])
+def smscode():
+    ret = {
+        "errno": 0,
+        "errmsg": "发送短信验证码成功..."
+    }
+
+    return jsonify(ret)
