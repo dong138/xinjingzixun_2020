@@ -20,11 +20,20 @@ def register():
     # 2. 测试数据
     print(mobile, password, image_code, smscode)
 
-    # 验证图片验证码是否争取
-    if session.get("image_code") != image_code:
+    # 图片验证码已经在发送短信时使用了，此时就没有必要再校验了，也就是图片验证码是防止过于频繁的发送短信验证码，而短信验证码时防止过于频繁的注册
+    # # 验证图片验证码是否争取
+    # if session.get("image_code") != image_code:
+    #     ret = {
+    #         "errno": 1003,
+    #         "errmsg": "重新输入验证码"
+    #     }
+    #     return jsonify(ret)
+
+    # 校验"图片验证码"是否正确
+    if session.get("sms_code") != smscode:
         ret = {
             "errno": 1003,
-            "errmsg": "重新输入验证码"
+            "errmsg": "重新输入手机验证码"
         }
         return jsonify(ret)
 
