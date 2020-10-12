@@ -1,7 +1,10 @@
+import random
+
 from flask import jsonify, request, session, redirect, url_for, make_response
 
 from models.index import User
 from models import db
+from utils.sms_aliyun import send_msg
 
 from . import passport_blu
 
@@ -24,11 +27,18 @@ def register():
     smscode = request.json.get("smscode")
 
     # 判断验证码是否正确，如果不正确，直接返回对应的提示
-    print("=====>", image_code, session['image_code'])
-    if image_code.lower() != session['image_code'].lower():
+    # print("=====>", image_code, session['image_code'])
+    # if image_code.lower() != session['image_code'].lower():
+    #     return jsonify({
+    #         "errno": 1003,
+    #         "errmsg": "验证码不正确..."
+    #     })
+
+    print("用输入的短息验证码是:", smscode, " 系统存储的短信验证码是:", session['sms_code'])
+    if smscode != session['sms_code']:
         return jsonify({
             "errno": 1003,
-            "errmsg": "验证码不正确..."
+            "errmsg": "短信验证码不正确..."
         })
 
     # 2. 创建User模型类对象，添加属性
@@ -122,3 +132,36 @@ def image_code():
     resp.headers['Content-Type'] = 'image/png'
 
     return resp
+
+
+@passport_blu.route("/passport/smscode", methods=["POST"])
+def send_message():
+    # 思考：发送短信流程
+    # 1. 获取用户的信息（手机号、图片验证码）
+    mobile = request.json.get("mobile")
+    image_code = request.json.get("image_code")
+
+    if image_code.lower() != session.get("image_code").lower():
+        ret = {
+            "errno": 4004,
+            "errmsg": "图片验证码不正确，请重新输入"
+        }
+
+        return jsonify(ret)
+
+    # 2. 生成一个随机值
+    random_num = str(random.randint(100000, 999999))
+
+    # 3. 借助阿里云发送短信(随机值)
+    send_msg(mobile, random_num)
+    print("短信验证码是:", random_num)
+
+    # 4. 存储到session，以便在注册函数中提取 进行校验
+    session['sms_code'] = random_num
+
+    ret = {
+        "errno": 0,
+        "errmsg": "发送成功..."
+    }
+
+    return jsonify(ret)

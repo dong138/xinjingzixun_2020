@@ -2,7 +2,7 @@ from flask import Flask
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 
-from views import index_blu, passport_blu, user_blu, news_blu
+from views import index_blu, passport_blu, user_blu, news_blu, admin_blu
 from models import db
 from utils.common import show_clicks_top_6_news, show_news_status, show_news_status_class_name
 
@@ -14,6 +14,7 @@ app.register_blueprint(index_blu)
 app.register_blueprint(passport_blu)
 app.register_blueprint(user_blu)
 app.register_blueprint(news_blu)
+app.register_blueprint(admin_blu)
 
 # 配置app
 app.config.from_pyfile("config.ini")

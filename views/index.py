@@ -15,7 +15,7 @@ def index():
     user_id = session.get("user_id")
     nick_name = session.get("nick_name")
 
-    return render_template("index.html", clicks_top_6_news=clicks_top_6_news, nick_name=nick_name)
+    return render_template("index/index.html", clicks_top_6_news=clicks_top_6_news, nick_name=nick_name)
 
 
 @index_blu.route("/newslist")
@@ -70,4 +70,4 @@ def detail(news_id):
     user = db.session.query(User).filter(User.id == user_id).first()
     user_like_comments = user.like_comment  # 提取当前用户所有点过赞的评论
 
-    return render_template("detail.html", news=news, nick_name=nick_name, news_author=news_author, comments=comments, user_like_comments=user_like_comments)
+    return render_template("index/detail.html", news=news, nick_name=nick_name, news_author=news_author, comments=comments, user_like_comments=user_like_comments)
