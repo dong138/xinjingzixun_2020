@@ -39,8 +39,7 @@ $(function(){
     });
 
     $confirm.click(function(){
-
-        var params = {}
+        var params = {};
         if(sHandler=='edit')
         {
             var sVal = $input.val();
@@ -51,7 +50,7 @@ $(function(){
             }
             params = {
                 "id": sId,
-                "name": sVal,
+                "name": sVal
             };
         }
         else
@@ -63,11 +62,28 @@ $(function(){
                 return;
             }
             params = {
-                "name": sVal,
+                "name": sVal
             }
         }
 
         // TODO 发起修改分类请求
+        $.ajax({
+            url: "/admin/news_type",
+            type: "post",
+            data: JSON.stringify(params),
+            contentType: "application/json",
+            headers: {
+                "X-CSRFToken": getCookie("csrf_token")
+            },
+            success: function (resp) {
+                if (resp.errno == "0") {
+                    // 刷新当前界面
+                    location.reload();
+                }else {
+                    $error.html(resp.errmsg).show();
+                }
+            }
+        })
 
     })
-})
+});
