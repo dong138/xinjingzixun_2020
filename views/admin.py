@@ -36,6 +36,34 @@ def news_review_detail():
     return render_template("admin/news_review_detail.html", news=news)
 
 
+@admin_blu.route("/admin/news_review_detail/<int:news_id>", methods=["POST"])
+def save_news_review_detail(news_id):
+    # 获取新闻
+    news = db.session.query(News).filter(News.id == news_id).first()
+    if not news:
+        # 如果没有这个新闻，就返回error信息
+        return jsonify({
+            "errno": 5003,
+            "errmsg": "未找到对应的新闻"
+        })
+
+    # 提取，审核结果
+    action = request.json.get("action")
+    if action == "accept":
+        news.status = 0
+    else:
+        news.status = -1
+
+    # 保存到数据库
+    db.session.commit()
+
+    # 返回对应信息
+    return jsonify({
+        "errno": 0,
+        "errmsg": "成功"
+    })
+
+
 @admin_blu.route("/admin/news_edit.html")
 def news_edit():
     page = int(request.args.get("page", 1))
