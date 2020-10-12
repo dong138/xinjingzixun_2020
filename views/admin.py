@@ -33,6 +33,11 @@ def news_edit():
     return render_template("admin/news_edit.html", paginate=paginate)
 
 
+@admin_blu.route("/admin/news_edit_detail.html")
+def news_edit_detail():
+    return render_template("admin/news_edit_detail.html")
+
+
 @admin_blu.route("/admin/news_type.html")
 def news_type():
     news_types = db.session.query(Category).filter(Category.id != 1).all()
