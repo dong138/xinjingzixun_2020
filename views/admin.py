@@ -2,7 +2,7 @@ from flask import render_template, request
 from flask import jsonify
 
 from models import db
-from models.index import Category
+from models.index import Category, News
 from . import admin_blu
 
 
@@ -28,7 +28,9 @@ def news_review():
 
 @admin_blu.route("/admin/news_edit.html")
 def news_edit():
-    return render_template("admin/news_edit.html")
+    page = int(request.args.get("page", 1))
+    paginate = db.session.query(News).paginate(page, 5, False)
+    return render_template("admin/news_edit.html", paginate=paginate)
 
 
 @admin_blu.route("/admin/news_type.html")
