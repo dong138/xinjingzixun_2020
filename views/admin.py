@@ -30,7 +30,10 @@ def news_review():
 
 @admin_blu.route("/admin/news_review_detail.html")
 def news_review_detail():
-    return render_template("admin/news_review_detail.html")
+    # 提取新闻
+    news_id = int(request.args.get("id", 0))
+    news = db.session.query(News).filter(News.id == news_id).first()
+    return render_template("admin/news_review_detail.html", news=news)
 
 
 @admin_blu.route("/admin/news_edit.html")
