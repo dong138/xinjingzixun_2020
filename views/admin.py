@@ -28,6 +28,11 @@ def news_review():
     return render_template("admin/news_review.html", paginate=paginate)
 
 
+@admin_blu.route("/admin/news_review_detail.html")
+def news_review_detail():
+    return render_template("admin/news_review_detail.html")
+
+
 @admin_blu.route("/admin/news_edit.html")
 def news_edit():
     page = int(request.args.get("page", 1))
