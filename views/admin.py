@@ -35,7 +35,12 @@ def news_edit():
 
 @admin_blu.route("/admin/news_edit_detail.html")
 def news_edit_detail():
-    return render_template("admin/news_edit_detail.html")
+    # 查询当前新闻
+    news_id = int(request.args.get("id", 0))
+    news = db.session.query(News).filter(News.id == news_id).first()
+    # 获取新闻可选择的所有列表
+    categorys = db.session.query(Category).filter(Category.id != 1).all()
+    return render_template("admin/news_edit_detail.html", news=news, categorys=categorys)
 
 
 @admin_blu.route("/admin/news_type.html")
