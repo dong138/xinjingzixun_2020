@@ -33,7 +33,7 @@
 					<td>{{ news.create_time }}</td>
 					<td>{{ news.status | show_news_status_name }}</td>
 					<td>
-						<a href="news_review_detail.html" class="review">审核</a>
+						<a href="news_review_detail.html?id={{ news.id }}" class="review">审核</a>
 					</td>
 				</tr>
                 {% endfor %}
