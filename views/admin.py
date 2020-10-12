@@ -1,5 +1,8 @@
 from flask import render_template
+from flask import jsonify
 
+from models import db
+from models.index import Category
 from . import admin_blu
 
 
@@ -30,4 +33,15 @@ def news_edit():
 
 @admin_blu.route("/admin/news_type.html")
 def news_type():
-    return render_template("admin/news_type.html")
+    news_types = db.session.query(Category).filter(Category.id != 1).all()
+    return render_template("admin/news_type.html", news_types=news_types)
+
+
+@admin_blu.route("/admin/news_type", methods=["POST"])
+def news_type_edit():
+    ret = {
+        "errno": 0,
+        "errmsg": "成功"
+    }
+
+    return jsonify(ret)
