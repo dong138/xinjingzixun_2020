@@ -1,4 +1,4 @@
-from flask import render_template, request
+from flask import render_template, request, redirect, url_for
 from flask import jsonify
 
 from models import db
@@ -41,6 +41,35 @@ def news_edit_detail():
     # 获取新闻可选择的所有列表
     categorys = db.session.query(Category).filter(Category.id != 1).all()
     return render_template("admin/news_edit_detail.html", news=news, categorys=categorys)
+
+
+@admin_blu.route("/admin/news_edit_detail/<int:news_id>", methods=["POST"])
+def save_news(news_id):
+    # 更新新闻
+    news = db.session.query(News).filter(News.id == news_id).first()
+    if not news:
+        # 如果没有id，那么就无需保存
+        ret = {
+            "errno": 5002,
+            "errmsg": "没有对应的新闻"
+        }
+        return jsonify(ret)
+
+    news.title = request.form.get("title")
+    news.digest = request.form.get("digest")
+    news.content = request.form.get("content")
+    news.category_id = request.form.get("category_id")
+    index_image_url = request.form.get("index_image_url")
+    if index_image_url:
+        news.index_image_url = index_image_url
+
+    # 将修改的信息写入到数据库，此时真的更新成功
+    db.session.commit()
+    ret = {
+        "errno": 0,
+        "errmsg": "成功"
+    }
+    return jsonify(ret)
 
 
 @admin_blu.route("/admin/news_type.html")

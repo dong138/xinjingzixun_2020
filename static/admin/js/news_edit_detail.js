@@ -31,10 +31,12 @@ $(function(){
                 if (resp.errno == "0") {
                     // `编辑新闻`成功
                     alert('编辑成功');
+                    window.location.href="/admin/news_edit.html"
                 }
                 else {
                     // `编辑新闻`失败
                     alert(resp.errmsg);
+                    window.location.href="/admin/news_edit.html"
                 }
             }
         });
