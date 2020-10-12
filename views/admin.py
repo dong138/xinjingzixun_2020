@@ -23,7 +23,9 @@ def user_list():
 
 @admin_blu.route("/admin/news_review.html")
 def news_review():
-    return render_template("admin/news_review.html")
+    page = int(request.args.get("page", 1))
+    paginate = db.session.query(News).order_by(-News.create_time).paginate(page, 5, False)
+    return render_template("admin/news_review.html", paginate=paginate)
 
 
 @admin_blu.route("/admin/news_edit.html")
