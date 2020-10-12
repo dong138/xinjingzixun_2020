@@ -1,7 +1,7 @@
 from flask import render_template, jsonify, request, session
 
 from models import db
-from models.index import News, Comment, User
+from models.index import News, Comment, User, Category
 
 from . import index_blu
 
@@ -15,7 +15,10 @@ def index():
     user_id = session.get("user_id", 0)
     nick_name = session.get("nick_name", "")
 
-    return render_template("index/index.html", clicks_top_6_news=clicks_top_6_news, nick_name=nick_name)
+    # 查询分类
+    categorys = db.session.query(Category).filter(Category.id != 1).all()
+
+    return render_template("index/index.html", clicks_top_6_news=clicks_top_6_news, nick_name=nick_name, categorys=categorys)
 
 
 @index_blu.route("/newslist")
@@ -29,10 +32,10 @@ def category_news():
 
     # 2. 到数据库中查询数据
     # 如果cid是0，表示要看最新的，如果不是0则按照原来规则查询
-    if cid == 0:
+    if cid == 1:
         paginate = db.session.query(News).filter(News.status == 0).order_by(-News.create_time).paginate(page=int(page), per_page=int(per_page), error_out=False)
     else:
-        cid += 1  # 由于测试数据分类中从0开始，而数据库中是从1开始的，所以用户点击的1实际上是2
+        # cid = 1  # 由于测试数据分类中从0开始，而数据库中是从1开始的，所以用户点击的1实际上是2
         paginate = db.session.query(News).filter(News.category_id == cid, News.status == 0).order_by(-News.create_time).paginate(page=int(page), per_page=int(per_page), error_out=False)
 
     # 3. 准备好要返回给浏览器的数据
