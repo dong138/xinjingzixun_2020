@@ -20,11 +20,11 @@
 			<h3 class="review_title">新闻版式编辑</h3>
 	    	<div class="form_group">
 	    		<label>新闻标题：</label>
-	    		<input type="text" class="input_txt2" value="{{ news.title }}">
+	    		<input type="text" class="input_txt2" value="{{ news.title }}" name="title">
 	    	</div>
 	    	<div class="form_group">
 				<label>新闻分类：</label>
-				<select class="sel_opt">
+				<select class="sel_opt" name="category_id">
                     {% for category in categorys %}
 					<option value="{{ category.id }}">{{ category.name }}</option>
                     {% endfor %}
@@ -32,7 +32,7 @@
 			</div>
 			<div class="form_group">
 				<label>新闻摘要：</label>
-				<textarea class="input_multxt">{{ news.digest }}</textarea>
+				<textarea class="input_multxt" name="digest">{{ news.digest }}</textarea>
 			</div>
 			<div class="form_group">
 				<label>索引图片：</label>
@@ -40,7 +40,7 @@
 			</div>
 			<div class="form_group">
 				<label>上传图片：</label>
-				<input type="file" class="input_file">
+				<input type="file" class="input_file" name="index_image_url">
 			</div>
 			<div class="form_group">
 				<label>新闻内容：</label>
