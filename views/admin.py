@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from flask import render_template, request, redirect, url_for, session
+from flask import render_template, request, redirect, url_for, session, g
 from flask import jsonify
 from sqlalchemy import extract
 
@@ -11,13 +11,13 @@ from . import admin_blu
 
 @admin_blu.route("/admin")
 def admin():
-    user_id = session.get("user_id")
-    user = db.session.query(User).filter(User.id == user_id).first()
-    if not user:
+    # user_id = session.get("user_id")
+    # user = db.session.query(User).filter(User.id == user_id).first()
+    if not g.user:
         # 如果用户未登录，那么直接跳转到前台首页
         return redirect("index_blu.index")
 
-    return render_template("admin/index.html", user=user)
+    return render_template("admin/index.html", user=g.user)
 
 
 @admin_blu.route("/admin/user_count.html")
