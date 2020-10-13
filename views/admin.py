@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from flask import render_template, request, redirect, url_for
 from flask import jsonify
@@ -32,7 +32,33 @@ def user_count():
                                               extract('month', User.create_time) == month,
                                               extract('day', User.create_time) == day).count()
 
-    return render_template("admin/user_count.html", total_count=total_count, month_count=month_count, day_count=day_count)
+    # 计算出近30天的数据
+    counts_li = []
+    date_li = []
+    begin_date = now_date - timedelta(days=29)
+
+    for i in range(0, 30):
+        # 计算当前日期
+        cur_date = begin_date + timedelta(days=i)
+
+        # 获取当前日期的年月日
+        year = cur_date.year
+        month = cur_date.month
+        day = cur_date.day
+
+        # 计算出当天新增用户数量
+        count = db.session.query(User).filter(extract('year', User.last_login) == year,
+                                              extract('month', User.last_login) == month,
+                                              extract('day', User.last_login) == day).count()
+
+        # 把当天新增用户数量保存在counts_li列表中
+        counts_li.append(count)
+
+        # 保存当前日期
+        date_str = cur_date.strftime('%Y-%m-%d')
+        date_li.append(date_str)
+
+    return render_template("admin/user_count.html", total_count=total_count, month_count=month_count, day_count=day_count, counts_li=counts_li, date_li=date_li)
 
 
 @admin_blu.route("/admin/user_list.html")
