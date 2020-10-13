@@ -1,4 +1,4 @@
-from flask import session, g
+from flask import session, g, request, redirect, url_for
 
 from models import db
 from models.index import User
@@ -46,3 +46,9 @@ def set_after_request_handle_fuc(app):
         # 然后在视图函数中就可以通过g.user提取出来。也就是说g能够帮我们在多个函数之间传递参数
         user_id = session.get("user_id")
         g.user = db.session.query(User).filter(User.id == user_id).first()
+
+        # 如果请求路径是/admin开始，那么就检查是否有管理员权限
+        # 如果是管理员的话g.user.is_admin此时是1，如果不是 那么就是0
+        if request.path.startswith("/admin") and not g.user.is_admin:
+            # 如果不是管理员，还想访问URL以/admin开始页面，则返回首页
+            return redirect(url_for('index_blu.index'))
