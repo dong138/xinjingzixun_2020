@@ -15,10 +15,10 @@ app.config.from_pyfile("config.ini")
 
 # 创建蓝图，且注册到app
 app.register_blueprint(index_blu)
-app.register_blueprint(passport_blu)
-app.register_blueprint(user_blu)
-app.register_blueprint(news_blu)
-app.register_blueprint(admin_blu)
+app.register_blueprint(passport_blu, url_prefix="/passport")
+app.register_blueprint(user_blu, url_prefix="/user")
+app.register_blueprint(news_blu, url_prefix="/news")
+app.register_blueprint(admin_blu, url_prefix="/admin")
 
 # 初始化数据库
 db.init_app(app)

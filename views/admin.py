@@ -9,7 +9,7 @@ from models.index import Category, News, User
 from . import admin_blu
 
 
-@admin_blu.route("/admin")
+@admin_blu.route("/")
 def admin():
     # user_id = session.get("user_id")
     # user = db.session.query(User).filter(User.id == user_id).first()
@@ -20,7 +20,7 @@ def admin():
     return render_template("admin/index.html", user=g.user)
 
 
-@admin_blu.route("/admin/user_count.html")
+@admin_blu.route("/user_count.html")
 def user_count():
     # 查询总数
     total_count = db.session.query(User).count()
@@ -67,14 +67,14 @@ def user_count():
     return render_template("admin/user_count.html", total_count=total_count, month_count=month_count, day_count=day_count, counts_li=counts_li, date_li=date_li)
 
 
-@admin_blu.route("/admin/user_list.html")
+@admin_blu.route("/user_list.html")
 def user_list():
     page = int(request.args.get("page", 1))
     paginate = db.session.query(User).paginate(page, 5, False)
     return render_template("admin/user_list.html", paginate=paginate)
 
 
-@admin_blu.route("/admin/news_review.html")
+@admin_blu.route("/news_review.html")
 def news_review():
     page = int(request.args.get("page", 1))
     paginate = db.session.query(News).order_by(-News.create_time).paginate(page, 5, False)
@@ -89,7 +89,7 @@ def news_review_detail():
     return render_template("admin/news_review_detail.html", news=news)
 
 
-@admin_blu.route("/admin/news_review_detail/<int:news_id>", methods=["POST"])
+@admin_blu.route("/news_review_detail/<int:news_id>", methods=["POST"])
 def save_news_review_detail(news_id):
     # 获取新闻
     news = db.session.query(News).filter(News.id == news_id).first()
@@ -117,14 +117,14 @@ def save_news_review_detail(news_id):
     })
 
 
-@admin_blu.route("/admin/news_edit.html")
+@admin_blu.route("/news_edit.html")
 def news_edit():
     page = int(request.args.get("page", 1))
     paginate = db.session.query(News).paginate(page, 5, False)
     return render_template("admin/news_edit.html", paginate=paginate)
 
 
-@admin_blu.route("/admin/news_edit_detail.html")
+@admin_blu.route("/news_edit_detail.html")
 def news_edit_detail():
     # 查询当前新闻
     news_id = int(request.args.get("id", 0))
@@ -134,7 +134,7 @@ def news_edit_detail():
     return render_template("admin/news_edit_detail.html", news=news, categorys=categorys)
 
 
-@admin_blu.route("/admin/news_edit_detail/<int:news_id>", methods=["POST"])
+@admin_blu.route("/news_edit_detail/<int:news_id>", methods=["POST"])
 def save_news(news_id):
     # 更新新闻
     news = db.session.query(News).filter(News.id == news_id).first()
@@ -163,13 +163,13 @@ def save_news(news_id):
     return jsonify(ret)
 
 
-@admin_blu.route("/admin/news_type.html")
+@admin_blu.route("/news_type.html")
 def news_type():
     news_types = db.session.query(Category).filter(Category.id != 1).all()
     return render_template("admin/news_type.html", news_types=news_types)
 
 
-@admin_blu.route("/admin/news_type", methods=["POST"])
+@admin_blu.route("/news_type", methods=["POST"])
 def news_type_edit_or_add():
     # 提取参数
     category_id = request.json.get("id")
