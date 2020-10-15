@@ -67,8 +67,38 @@ def news_comment():
     db.session.add(new_comment)
     db.session.commit()
 
-    ret = {
-        "errno": 0,
-        "errmsg": "成功"
-    }
-    return jsonify(ret)
+    # 3. 根据是否有parent_id来区分是评论还是回复
+    if not parent_id:
+        # 3.1 评论
+        ret = {
+            "errno": 0,
+            "errmsg": "成功"
+        }
+        return jsonify(ret)
+    else:
+        # 3.2 回复
+        user = db.session.query(User).filter(User.id == user_id).first()
+        parent_comment = db.session.query(Comment).filter(Comment.id == parent_id).first()
+        parent_user = parent_comment.user  # 评论的用户
+        ret = {
+            "errno": 0,
+            "errmsg": "成功",
+            "comment": {
+                "content": content,
+                "user": {
+                    "avatar_url": user.avatar_url,
+                    "nick_name": user.nick_name,
+                },
+                "parent": {
+                    "user": {
+                        "nick_name": parent_user.nick_name,
+                    },
+                    "content": parent_comment.content
+                },
+                "create_time": new_comment.create_time.strftime("%Y-%m-%d %H:%M:%S"),
+                "id": new_comment.id,
+                "news_id": news_id
+            }
+        }
+
+        return jsonify(ret)
