@@ -208,3 +208,8 @@ def news_type_edit_or_add():
         }
 
         return jsonify(ret)
+
+
+@admin_blu.route("/login", methods=["GET", "POST"])
+def login():
+    return render_template("admin/login.html")

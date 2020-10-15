@@ -49,6 +49,13 @@ def set_after_request_handle_fuc(app):
 
         # 如果请求路径是/admin开始，那么就检查是否有管理员权限
         # 如果是管理员的话g.user.is_admin此时是1，如果不是 那么就是0
-        if request.path.startswith("/admin") and not g.user.is_admin:
-            # 如果不是管理员，还想访问URL以/admin开始页面，则返回首页
-            return redirect(url_for('index_blu.index'))
+        # if request.path.startswith("/admin") and not g.user.is_admin:
+        #     # 如果不是管理员，还想访问URL以/admin开始页面，则返回首页
+        #     return redirect(url_for('index_blu.index'))
+
+        # 如下代码的功能：如果用户未在访问后台时以管理员方式登录，那么也就没有"is_admin"这个信息时，就跳转到后台登录页面
+        # print("----->", request.host, request.path)
+        if request.host.startswith("admin") and not session.get("is_admin"):
+            if not (request.path.startswith("/login") or request.path.startswith("/static")):
+                # 如果不是管理员，则返回首页
+                return redirect(url_for('admin_blu.login'))
