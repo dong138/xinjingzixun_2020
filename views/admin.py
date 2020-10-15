@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from flask import render_template, request, redirect, url_for, session, g
 from flask import jsonify
 from sqlalchemy import extract
+from werkzeug.security import check_password_hash
 
 from models import db
 from models.index import Category, News, User
@@ -212,4 +213,13 @@ def news_type_edit_or_add():
 
 @admin_blu.route("/login", methods=["GET", "POST"])
 def login():
-    return render_template("admin/login.html")
+    if request.method == "GET":
+        return render_template("admin/login.html")
+    else:
+        user_name = request.form.get("username")
+        password = request.form.get("password")
+        user = db.session.query(User).filter(User.nick_name == user_name, User.is_admin == 1).first()
+        if user and check_password_hash(user.password_hash, password):
+            session['is_admin'] = True  # 用来标记是超级管理员
+
+    return redirect(url_for("admin_blu.admin"))
