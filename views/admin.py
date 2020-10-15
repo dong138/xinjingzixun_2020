@@ -221,5 +221,8 @@ def login():
         user = db.session.query(User).filter(User.nick_name == user_name, User.is_admin == 1).first()
         if user and check_password_hash(user.password_hash, password):
             session['is_admin'] = True  # 用来标记是超级管理员
+            if not session.get("user_id"):
+                session['user_id'] = user.id
+                session['nick_name'] = user.nick_name
 
     return redirect(url_for("admin_blu.admin"))
