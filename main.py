@@ -18,7 +18,7 @@ app.register_blueprint(index_blu)
 app.register_blueprint(passport_blu, url_prefix="/passport")
 app.register_blueprint(user_blu, url_prefix="/user")
 app.register_blueprint(news_blu, url_prefix="/news")
-app.register_blueprint(admin_blu, url_prefix="/admin")
+app.register_blueprint(admin_blu, url_prefix="/admin", subdomain="admin")
 
 # 初始化数据库
 db.init_app(app)
