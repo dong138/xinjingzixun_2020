@@ -34,7 +34,7 @@ def show_news_status_style_name(index):
     return ""
 
 
-def set_after_request_handle_fuc(app):
+def set_before_request_handle_fuc(app):
     """
     对flask对象 设置 每次调用视图函数之前，要执行的事情
     """
